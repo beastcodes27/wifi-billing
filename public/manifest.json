@@ -1,0 +1,54 @@
+{
+  "name": "MedBando - WiFi Billing",
+  "short_name": "MedBando",
+  "description": "Mfumo wa kisasa wa kusimamia WiFi Billing, Vifurushi na Malipo ya Bando mtandaoni",
+  "start_url": "admin/dashboard",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#07162A",
+  "theme_color": "#07162A",
+  "orientation": "portrait-primary",
+  "lang": "sw",
+  "categories": ["utilities", "business", "finance"],
+  "icons": [
+    {
+      "src": "img/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "img/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "url": "admin/dashboard",
+      "description": "Fungua MedBando Dashboard"
+    },
+    {
+      "name": "Wateja",
+      "url": "admin/customers",
+      "description": "Orodha ya Wateja"
+    },
+    {
+      "name": "Vocha",
+      "url": "admin/vouchers",
+      "description": "Tengeneza Vocha"
+    },
+    {
+      "name": "Hotspot Portal",
+      "url": "./",
+      "description": "Ukurasa wa Bando za Wateja"
+    }
+  ]
+}
