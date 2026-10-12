@@ -38,8 +38,6 @@ Route::middleware('fallback_tenant')->prefix('portal')->name('portal.')->group(f
 
 // Payment webhooks + PWA manifest (stable public URLs, tenant optional)
 Route::middleware('fallback_tenant')->group(function () {
-    Route::post('/api/fimipay-webhook', [WebhookController::class, 'fimiPay'])->name('portal.fimipay.webhook');
-    Route::post('/api/palm-pesa-webhook', [WebhookController::class, 'palmPesa']);
     Route::post('/api/sonicpesa-webhook', [WebhookController::class, 'sonicPesa'])->name('portal.sonicpesa.webhook');
     Route::get('/manifest.json', function () {
         $path = public_path('manifest.json');
@@ -141,8 +139,6 @@ Route::middleware(['auth', 'tenant', \App\Http\Middleware\RequireActiveSubscript
     Route::get('/admin/settings', [SettingsController::class, 'index'])->name('admin.settings');
     Route::post('/admin/settings/reset-sales', [SettingsController::class, 'resetSales'])->name('admin.settings.reset_sales');
     Route::post('/admin/settings/set-sales', [SettingsController::class, 'setSales'])->name('admin.settings.set_sales');
-    Route::get('/admin/settings/payment', [\App\Http\Controllers\Admin\PaymentSettingsController::class, 'index'])->name('admin.settings.payment');
-    Route::post('/admin/settings/payment', [\App\Http\Controllers\Admin\PaymentSettingsController::class, 'update'])->name('admin.settings.payment.update');
     Route::get('/admin/mikrotik/status', [SettingsController::class, 'mikrotikStatus'])->name('admin.mikrotik.status');
 
     // SaaS Billing

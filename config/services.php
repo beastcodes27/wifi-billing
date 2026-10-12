@@ -35,13 +35,6 @@ return [
         ],
     ],
 
-    'fimipay' => [
-        'base_url' => env('FIMIPAY_BASE_URL', 'https://fimipay.com/api/v1'),
-        'environment' => env('FIMIPAY_ENVIRONMENT', 'live'),
-        'public_id' => env('FIMIPAY_PUBLIC_ID'),
-        'secret_key' => env('FIMIPAY_SECRET_KEY'),
-    ],
-
     'sonicpesa' => [
         'base_url' => env('SONIC_PESA_BASE_URL', 'https://api.sonicpesa.com/api/v1'),
         'api_key' => env('SONIC_PESA_API_KEY'),

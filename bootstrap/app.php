@@ -12,8 +12,6 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->validateCsrfTokens(except: [
-            'api/fimipay-webhook',
-            'api/palm-pesa-webhook',
             'api/sonicpesa-webhook',
             'api/mikrotik/*',
             'portal/restore-bundle',

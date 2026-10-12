@@ -14,14 +14,9 @@
                 </div>
                 <div>
                     <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--text-main); margin: 0; letter-spacing: -0.02em;">Mipangilio</h2>
-                    <p style="margin: 0.15rem 0 0; font-size: 0.8rem; color: var(--text-muted);">Usanidi wa mfumo, lango la malipo na mtandao</p>
+                    <p style="margin: 0.15rem 0 0; font-size: 0.8rem; color: var(--text-muted);">Usanidi wa mfumo na mtandao</p>
                 </div>
             </div>
-        </div>
-        <div style="display: flex; gap: 0.5rem;">
-            <a href="{{ route('admin.settings.payment') }}" class="btn-banking btn-primary mobile-btn-compact" style="text-decoration: none; font-size: 0.82rem; padding: 0.55rem 1rem; border-radius: 10px; background: linear-gradient(135deg, #FF3300 0%, #ff5722 100%); color: #fff; border: none; font-weight: 700; display: inline-flex; align-items: center; gap: 0.4rem;">
-                <i class="fas fa-credit-card"></i> Njia za Malipo
-            </a>
         </div>
     </div>
 
@@ -79,7 +74,7 @@
             </div>
         </div>
 
-        {{-- FimiPay Gateway --}}
+        {{-- SonicPesa Gateway (platform-managed) --}}
         <div>
             <div class="banking-card p-3 p-md-4 h-100" style="border-radius: 16px; background: #FFFFFF; border: 1px solid var(--border-color); box-shadow: var(--shadow-xs);">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
@@ -88,43 +83,36 @@
                             <i class="fas fa-bolt"></i>
                         </div>
                         <div style="min-width: 0;">
-                            <h3 style="margin: 0; font-size: 1rem; font-weight: 800; color: var(--text-main);">FimiPay Gateway API</h3>
-                            <p style="margin: 0.15rem 0 0; font-size: 0.78rem; color: var(--text-muted);">Lango la malipo ya mitandao ya simu za Tanzania</p>
+                            <h3 style="margin: 0; font-size: 1rem; font-weight: 800; color: var(--text-main);">SonicPesa Gateway</h3>
+                            <p style="margin: 0.15rem 0 0; font-size: 0.78rem; color: var(--text-muted);">Lango la malipo la mfumo (linawekwa na msimamizi mkuu)</p>
                         </div>
                     </div>
-                    <a href="{{ route('admin.settings.payment') }}" class="btn-banking btn-secondary" style="font-size: 0.75rem; padding: 0.4rem 0.75rem; border-radius: 8px; text-decoration: none; white-space: nowrap;">
-                        Hariri
-                    </a>
                 </div>
 
                 <div style="display: flex; flex-direction: column; gap: 1rem;">
                     <div>
                         <label style="font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; display: block; margin-bottom: 0.35rem;">Base URL</label>
                         <div style="background: #F8FAFC; border: 1px solid var(--border-color); padding: 0.65rem 0.95rem; border-radius: 10px; font-family: monospace; font-size: 0.82rem; color: #0F172A; word-break: break-all;">
-                            {{ env('FIMIPAY_BASE_URL', 'https://fimipay.com/api/v1') }}
-                        </div>
-                    </div>
-
-                    <div>
-                        <label style="font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; display: block; margin-bottom: 0.35rem;">Public ID</label>
-                        <div style="background: #F8FAFC; border: 1px solid var(--border-color); padding: 0.65rem 0.95rem; border-radius: 10px; font-family: monospace; font-size: 0.82rem; color: #0F172A; word-break: break-all; font-weight: 600;">
-                            {{ env('FIMIPAY_PUBLIC_ID', 'Not Set') }}
+                            {{ env('SONIC_PESA_BASE_URL', 'https://api.sonicpesa.com/api/v1') }}
                         </div>
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
                         <div>
-                            <label style="font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; display: block; margin-bottom: 0.35rem;">Environment</label>
-                            <div style="background: #F8FAFC; border: 1px solid var(--border-color); padding: 0.65rem 0.95rem; border-radius: 10px; font-family: monospace; font-weight: 700; color: #0F172A; text-transform: uppercase; font-size: 0.85rem;">
-                                {{ env('FIMIPAY_ENVIRONMENT', 'live') }}
+                            <label style="font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; display: block; margin-bottom: 0.35rem;">Currency</label>
+                            <div style="background: #F8FAFC; border: 1px solid var(--border-color); padding: 0.65rem 0.95rem; border-radius: 10px; font-family: monospace; font-weight: 700; color: #0F172A; font-size: 0.85rem;">
+                                {{ env('SONIC_PESA_CURRENCY', 'TZS') }}
                             </div>
                         </div>
 
                         <div>
-                            <label style="font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; display: block; margin-bottom: 0.35rem;">Secret Key</label>
-                            <div style="background: #F8FAFC; border: 1px solid var(--border-color); padding: 0.65rem 0.95rem; border-radius: 10px; font-family: monospace; color: var(--text-muted); font-size: 0.85rem;">
-                                &bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;
-                                <span style="font-size: 0.7rem; color: #10B981; font-weight: 700; margin-left: 0.25rem;">(Imehifadhiwa)</span>
+                            <label style="font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; display: block; margin-bottom: 0.35rem;">API Key</label>
+                            <div style="background: #F8FAFC; border: 1px solid var(--border-color); padding: 0.65rem 0.95rem; border-radius: 10px; font-family: monospace; font-size: 0.82rem;">
+                                @if(env('SONIC_PESA_API_KEY'))
+                                    <span style="font-size: 0.7rem; color: #10B981; font-weight: 700;">Imehifadhiwa</span>
+                                @else
+                                    <span style="font-size: 0.7rem; color: #DC2626; font-weight: 700;">Haijawekwa</span>
+                                @endif
                             </div>
                         </div>
                     </div>
