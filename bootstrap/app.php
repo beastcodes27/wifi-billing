@@ -25,6 +25,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'active_subscription' => \App\Http\Middleware\RequireActiveSubscription::class,
         ]);
 
+        // Resolve the active language (English/Swahili) for every web request.
+        $middleware->web(append: [
+            \App\Http\Middleware\SetLocale::class,
+        ]);
+
         $middleware->priority([
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,

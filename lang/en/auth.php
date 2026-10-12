@@ -1,0 +1,41 @@
+<?php
+
+return [
+    // Register
+    'title_register' => 'Sign up — MedBando',
+    'back_home' => 'Home',
+    'register_h1' => 'Open a Business Account',
+    'register_sub' => 'Start running your WiFi business today',
+    'trial_pill' => '1 month free',
+    'business_name' => 'Business name',
+    'owner_name' => 'Your name',
+    'phone' => 'Phone number',
+    'email' => 'Email',
+    'password' => 'Password',
+    'password_confirm' => 'Confirm password',
+    'business_name_ph' => 'e.g. Mama Asha WiFi',
+    'name_ph' => 'Full name',
+    'phone_ph' => '07XXXXXXXX',
+    'email_ph' => 'you@business.com',
+    'password_ph' => 'At least 8 characters',
+    'password_confirm_ph' => 'Repeat password',
+    'choose_plan' => 'Choose a plan',
+    'plan_meta' => ':routers routers · :customers customers',
+    'submit_register' => 'Open My Account',
+    'have_account' => 'Already have an account?',
+    'login_here' => 'Log in here',
+    'no_plans' => 'No plans available at the moment. Please try again later.',
+    'registering' => 'Signing up...',
+
+    // Login
+    'title_login' => 'Log in',
+    'system_online' => 'System Online',
+    'login_sub' => 'Log in to manage your network, vouchers and transactions',
+    'remember' => 'Remember me on this device',
+    'submit_login' => 'Log in to Dashboard',
+    'secure' => '256-Bit SSL • Fully secure',
+    'no_account' => 'No business account?',
+    'register_here' => 'Sign up here',
+    'need_help' => 'Need help?',
+    'logging_in' => 'Logging in...',
+];

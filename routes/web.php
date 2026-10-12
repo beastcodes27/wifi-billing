@@ -13,6 +13,15 @@ use App\Http\Controllers\Owner\RegisterController;
 // Public marketing landing page
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 
+// Language switch (English / Swahili)
+Route::get('/lang/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'sw'], true)) {
+        session(['locale' => $locale]);
+    }
+
+    return redirect()->back(302, [], '/');
+})->name('lang.switch');
+
 // Owner self-service authentication & registration
 Route::middleware('guest')->group(function () {
     Route::get('/owner/login', [\App\Http\Controllers\Admin\AuthController::class, 'showLoginForm'])->name('owner.login');
