@@ -295,4 +295,56 @@ class WebhookController extends Controller
 
         return response()->json(['status' => 'pending']);
     }
+
+    /**
+     * SonicPesa webhook — activates a tenant's SaaS subscription.
+     */
+    public function sonicPesa(Request $request)
+    {
+        $raw = $request->getContent();
+        $signature = $request->header('X-SonicPesa-Signature') ?? $request->header('X-Webhook-Signature');
+
+        $service = app(\App\Services\SonicPesaService::class);
+
+        if (! $service->verifyWebhookSignature($raw, $signature)) {
+            Log::warning('[SAAS] SonicPesa webhook signature verification failed', ['signature' => $signature]);
+
+            return response()->json(['status' => 'invalid_signature'], 401);
+        }
+
+        $payload = $request->json()->all() ?: (json_decode($raw, true) ?: []);
+        Log::info('[SAAS] SonicPesa Webhook Received', $payload);
+
+        $event = $payload['event'] ?? null;
+        $orderId = $payload['order_id'] ?? ($payload['data']['order_id'] ?? null);
+        $status = strtoupper((string) ($payload['payment_status'] ?? $payload['status'] ?? ''));
+
+        if (! $orderId) {
+            return response()->json(['status' => 'ignored', 'message' => 'Missing order_id'], 200);
+        }
+
+        $subscription = \App\Models\SaasSubscription::where('reference_number', $orderId)->first();
+
+        if (! $subscription) {
+            return response()->json(['status' => 'ignored', 'message' => 'Subscription not found'], 200);
+        }
+
+        if ($subscription->status === 'active') {
+            return response()->json(['status' => 'already_processed'], 200);
+        }
+
+        if (in_array($status, ['COMPLETED', 'SUCCESS'], true) || $event === 'payment.success') {
+            $subscription->activate();
+
+            return response()->json(['status' => 'success', 'message' => 'Subscription activated'], 200);
+        }
+
+        if (in_array($status, ['FAILED', 'CANCELLED', 'USERCANCELLED', 'REJECTED', 'EXPIRED'], true) || $event === 'payment.failed') {
+            $subscription->markFailed();
+
+            return response()->json(['status' => 'failed'], 200);
+        }
+
+        return response()->json(['status' => 'pending'], 200);
+    }
 }

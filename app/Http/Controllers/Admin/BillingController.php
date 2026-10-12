@@ -3,120 +3,103 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\SaasPlan;
+use App\Models\SaasSubscription;
+use App\Services\SonicPesaService;
+use App\Services\TenantContext;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class BillingController extends Controller
 {
+    protected SonicPesaService $sonic;
+
+    public function __construct(SonicPesaService $sonic)
+    {
+        $this->sonic = $sonic;
+    }
+
     public function index()
     {
-        $plans = \App\Models\SaasPlan::where('is_active', true)->get();
-        return view('admin.billing', compact('plans'));
+        $plans = SaasPlan::where('is_active', true)->orderBy('price')->get();
+
+        $tenant = app(TenantContext::class)->getTenant();
+        $subscription = $tenant
+            ? ($tenant->activeSubscription() ?: $tenant->currentSubscription)
+            : null;
+
+        return view('admin.billing', compact('plans', 'subscription'));
     }
 
     public function pay(Request $request)
     {
-        $tenant = app(\App\Services\TenantContext::class)->getTenant();
-        $subscription = $tenant->currentSubscription;
-        $plan = $subscription ? $subscription->plan : null;
+        $tenant = app(TenantContext::class)->getTenant();
+
+        if (! $tenant) {
+            return back()->with('error', 'Biashara haijatambulika.');
+        }
 
         $validated = $request->validate([
             'phone' => 'required|string',
             'plan_id' => 'required|exists:saas_plans,id',
         ]);
 
-        $plan = \App\Models\SaasPlan::find($validated['plan_id']);
-
-        if (!$plan) {
-            return back()->with('error', 'Kifurushi ulichochagua hakipo.');
-        }
-
-        $transactionRef = 'SUB-' . time() . '-' . mt_rand(100, 999);
+        $plan = SaasPlan::findOrFail($validated['plan_id']);
         $amount = $plan->price;
 
+        $current = $tenant->activeSubscription() ?: $tenant->currentSubscription;
+        $base = ($current && $current->ends_at && $current->ends_at->isFuture())
+            ? $current->ends_at->copy()
+            : now();
+
+        // Free plan — activate immediately without a gateway round-trip.
         if ($amount <= 0) {
-            // Auto activate free plan
-            \App\Models\SaasSubscription::updateOrCreate(
-                ['tenant_id' => $tenant->id],
-                [
-                    'saas_plan_id' => $plan->id,
-                    'status' => 'active',
-                    'starts_at' => now(),
-                    'ends_at' => now()->addMonths($plan->billing_cycle_months),
-                ]
-            );
+            SaasSubscription::create([
+                'tenant_id' => $tenant->id,
+                'saas_plan_id' => $plan->id,
+                'amount_paid' => 0,
+                'payment_method' => 'free',
+                'reference_number' => 'FREE-' . strtoupper(bin2hex(random_bytes(4))),
+                'starts_at' => now(),
+                'ends_at' => $base->addMonths($plan->billing_cycle_months),
+                'status' => 'active',
+            ]);
+            $tenant->update(['status' => 'active']);
+
             return redirect()->route('admin.dashboard')->with('success', 'Umefanikiwa kujiunga na kifurushi cha bure!');
         }
 
-        $phone = preg_replace('/[^0-9]/', '', $validated['phone']);
-        if (str_starts_with($phone, '0')) {
-            $phone = '255' . substr($phone, 1);
-        } elseif (strlen($phone) == 9) {
-            $phone = '255' . $phone;
+        $response = $this->sonic->createOrder([
+            'phone' => $validated['phone'],
+            'amount' => $amount,
+            'buyer_name' => $tenant->owner_name ?: $tenant->business_name,
+            'buyer_email' => $tenant->email ?: 'noreply@medbando.app',
+        ]);
+
+        $orderId = $this->sonic->extractOrderId($response);
+
+        if (! $orderId) {
+            Log::error('SaaS SonicPesa initiation failed', ['response' => $response]);
+
+            return back()->with('error', 'Kuna tatizo kuanzisha malipo. Hakikisha namba ya simu ipo sahihi na ina salio.');
         }
 
-        $baseUrl = env('PALM_PESA_BASE_URL');
-        $apiKey = env('PALM_PESA_API_KEY'); // MUST use system API for Super Admin
-        $userId = env('PALM_PESA_USER_ID');
-        $vendor = env('PALM_PESA_VENDOR');
+        $subscription = SaasSubscription::create([
+            'tenant_id' => $tenant->id,
+            'saas_plan_id' => $plan->id,
+            'amount_paid' => $amount,
+            'payment_method' => 'sonicpesa',
+            'reference_number' => $orderId,
+            'status' => 'pending',
+        ]);
 
-        try {
-            $response = \Illuminate\Support\Facades\Http::retry(3, 100)->withToken($apiKey)
-                ->withHeaders([
-                    'Accept' => 'application/json',
-                    'Content-Type' => 'application/json',
-                ])
-                ->post("$baseUrl/pay-via-mobile", [
-                    'user_id' => (string) $userId,
-                    'name' => 'SaaS Subscription',
-                    'email' => 'admin@wifi-billing.co.tz',
-                    'phone' => $phone,
-                    'amount' => (int) $amount,
-                    'transaction_id' => $transactionRef,
-                    'address' => 'Tanzania',
-                    'postcode' => '00000',
-                    'buyer_uuid' => $tenant->id
-                ]);
-
-            $responseData = $response->json();
-            
-            $isSuccessful = false;
-            if (isset($responseData['response']['resultcode']) && $responseData['response']['resultcode'] === '000') {
-                $isSuccessful = true;
-            } elseif (isset($responseData['response']['result']) && $responseData['response']['result'] === 'SUCCESS') {
-                $isSuccessful = true;
-            }
-
-            $orderId = $responseData['response']['order_id'] ?? null;
-            if (!$orderId && isset($responseData['order_id'])) {
-                $orderId = $responseData['order_id'];
-            }
-
-            if ($response->successful() && $isSuccessful && $orderId) {
-                // Save pending SaaS subscription
-                $subscription = \App\Models\SaasSubscription::create([
-                    'tenant_id' => $tenant->id,
-                    'saas_plan_id' => $plan->id,
-                    'amount_paid' => $amount,
-                    'payment_method' => 'palm_pesa',
-                    'reference_number' => $orderId,
-                    'status' => 'pending',
-                ]);
-
-                return redirect()->route('admin.billing.processing', $subscription->id);
-            } else {
-                \Illuminate\Support\Facades\Log::error('SaaS Palm Pesa Initiation Failed', ['response' => $responseData]);
-                return back()->with('error', 'Kuna tatizo kuanzisha malipo. Hakikisha namba ya simu ipo sahihi na ina salio.');
-            }
-        } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('SaaS Palm Pesa Exception: ' . $e->getMessage());
-            return back()->with('error', 'Hitilafu ya mtandao. Tafadhali jaribu tena.');
-        }
+        return redirect()->route('admin.billing.processing', $subscription->id);
     }
 
     public function processing($id)
     {
-        $tenant = app(\App\Services\TenantContext::class)->getTenant();
-        $subscription = \App\Models\SaasSubscription::where('tenant_id', $tenant->id)->findOrFail($id);
+        $tenant = app(TenantContext::class)->getTenant();
+        $subscription = SaasSubscription::where('tenant_id', $tenant->id)->findOrFail($id);
 
         if ($subscription->status === 'active') {
             return redirect()->route('admin.dashboard')->with('success', 'Malipo yamefanikiwa! Kifurushi chako kipo hewani.');
@@ -127,11 +110,21 @@ class BillingController extends Controller
 
     public function status($id)
     {
-        $tenant = app(\App\Services\TenantContext::class)->getTenant();
-        $subscription = \App\Models\SaasSubscription::where('tenant_id', $tenant->id)->findOrFail($id);
+        $tenant = app(TenantContext::class)->getTenant();
+        $subscription = SaasSubscription::where('tenant_id', $tenant->id)->findOrFail($id);
 
-        return response()->json([
-            'status' => $subscription->status
-        ]);
+        // Reconcile with the gateway while the payment is still pending.
+        if ($subscription->status === 'pending' && $subscription->reference_number) {
+            $gateway = $this->sonic->orderStatus($subscription->reference_number);
+            $status = $this->sonic->extractStatus($gateway);
+
+            if (in_array($status, ['COMPLETED', 'SUCCESS'], true)) {
+                $subscription->activate();
+            } elseif (in_array($status, ['FAILED', 'CANCELLED', 'USERCANCELLED', 'REJECTED', 'EXPIRED'], true)) {
+                $subscription->markFailed();
+            }
+        }
+
+        return response()->json(['status' => $subscription->fresh()->status]);
     }
 }

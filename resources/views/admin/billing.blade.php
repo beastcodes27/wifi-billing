@@ -28,9 +28,10 @@
 
 @php
     $tenant = app(\App\Services\TenantContext::class)->getTenant();
-    $subscription = $tenant ? $tenant->currentSubscription : null;
+    $subscription = $subscription ?? ($tenant ? ($tenant->activeSubscription() ?: $tenant->currentSubscription) : null);
     $plan = $subscription ? $subscription->plan : null;
-    $isActive = $subscription && $subscription->status === 'active' && now()->lessThan($subscription->ends_at);
+    $isActive = $subscription && in_array($subscription->status, ['active', 'trial']) && now()->lessThan($subscription->ends_at);
+    $isTrial = $subscription && $subscription->status === 'trial';
 @endphp
 
 {{-- Current Subscription Status Card --}}
@@ -43,17 +44,19 @@
             <div>
                 <div class="d-flex align-items-center gap-2">
                     <span class="badge-status {{ $isActive ? 'badge-success' : 'badge-danger' }}">
-                        {{ $isActive ? 'Active Subscription' : 'Usajili Umeisha / Haufanyi Kazi' }}
+                        {{ $isTrial ? 'Kipindi cha Majaribio (Trial)' : ($isActive ? 'Active Subscription' : 'Usajili Umeisha / Haufanyi Kazi') }}
                     </span>
                     <span style="font-weight:800; font-size:1.15rem; color:var(--text-main);">
                         {{ $plan ? $plan->name : 'Hakuna Kifurushi' }}
                     </span>
                 </div>
                 <div style="font-size:0.85rem; color:var(--text-muted); margin-top:4px;">
-                    @if($isActive)
+                    @if($isTrial)
+                        Unatumia kipindi cha majaribio cha bure. Lipia kifurushi kabla ya muda kuisha ili huduma zisikwame.
+                    @elseif($isActive)
                         Kifurushi chako kipo hewani na huduma zote za WiFi zinaendelea kufanya kazi kikamilifu.
                     @else
-                        Tafadhali chagua kifurushi hapa chini ili kuendelea kutumia mfumo wa MedBando bila kukwama.
+                        Tafadhali chagua kifurushi hapa chini ili kuendelea kutumia mfumo bila kukwama.
                     @endif
                 </div>
             </div>
@@ -61,7 +64,7 @@
 
         @if($isActive)
         <div style="background:#FFFFFF; border:1px solid var(--border-color); padding:0.75rem 1.4rem; border-radius:10px; text-align:right;">
-            <div style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; font-weight:700; letter-spacing:0.5px;">Mwisho wa Matumizi</div>
+            <div style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; font-weight:700; letter-spacing:0.5px;">{{ $isTrial ? 'Trial Inaisha' : 'Mwisho wa Matumizi' }}</div>
             <div style="font-size:1.1rem; font-weight:800; color:var(--text-main);">
                 {{ \Carbon\Carbon::parse($subscription->ends_at)->format('d M, Y') }}
             </div>
@@ -110,7 +113,7 @@
                 @if($p->has_auto_payment)
                 <li style="margin-bottom:0.75rem; display:flex; align-items:center; gap:0.6rem;">
                     <i class="fas fa-check-circle" style="color:var(--primary-blue);"></i>
-                    <strong>Malipo ya Kiotomatiki (Palm Pesa)</strong>
+                    <strong>Malipo ya Kiotomatiki (SonicPesa)</strong>
                 </li>
                 <li style="margin-bottom:0.75rem; display:flex; align-items:center; gap:0.6rem;">
                     <i class="fas fa-check-circle" style="color:var(--primary-blue);"></i>
