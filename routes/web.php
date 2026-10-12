@@ -141,6 +141,10 @@ Route::middleware(['auth', 'tenant', \App\Http\Middleware\RequireActiveSubscript
     Route::post('/admin/settings/set-sales', [SettingsController::class, 'setSales'])->name('admin.settings.set_sales');
     Route::get('/admin/mikrotik/status', [SettingsController::class, 'mikrotikStatus'])->name('admin.mikrotik.status');
 
+    // Guest captive portal branding (name, contact, colours, logo)
+    Route::get('/admin/branding', [\App\Http\Controllers\Admin\BrandingController::class, 'index'])->name('admin.branding');
+    Route::post('/admin/branding', [\App\Http\Controllers\Admin\BrandingController::class, 'update'])->name('admin.branding.update');
+
     // SaaS Billing
     Route::get('/admin/billing', [\App\Http\Controllers\Admin\BillingController::class, 'index'])->name('admin.billing');
     Route::post('/admin/billing/pay', [\App\Http\Controllers\Admin\BillingController::class, 'pay'])->name('admin.billing.pay');

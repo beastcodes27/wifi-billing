@@ -3,28 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#FF3300">
+    @php
+        $tenant = app(\App\Services\TenantContext::class)->getTenant();
+        $branding = $tenant ? $tenant->branding() : [
+            'name' => 'MedBando', 'tagline' => 'FAST & UNLIMITED WI-FI',
+            'phone' => '0762457308', 'whatsapp' => null, 'email' => null,
+            'primary_color' => '#FF3300', 'accent_color' => '#cc2900', 'logo' => null,
+        ];
+        $tenantName = strtoupper($branding['name']);
+    @endphp
+    <meta name="theme-color" content="{{ $branding['primary_color'] }}">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="MedBando">
-    <meta name="application-name" content="MedBando">
+    <meta name="apple-mobile-web-app-title" content="{{ $tenantName }}">
+    <meta name="application-name" content="{{ $tenantName }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="manifest" href="{{ asset('manifest.json') }}">
-    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ $branding['logo'] ? asset($branding['logo']) : asset('favicon.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
-    @php
-        $tenantName = 'MedBando';
-        $tenant = app(\App\Services\TenantContext::class)->getTenant();
-        if ($tenant && !empty($tenant->business_name)) {
-            $tenantName = strtoupper($tenant->business_name);
-        }
-    @endphp
-    <title>{{ $tenantName }} - MedBando Hotspot</title>
+    <title>{{ $tenantName }} - WiFi Hotspot</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #FF3300; /* Carrot Orange from user */
+            --primary: {{ $branding['primary_color'] }}; /* Owner-configured brand colour */
+            --primary-dark: {{ $branding['accent_color'] }};
             --bg-top: #121212; /* Very Dark Grey Background */
             --bg-bottom: #121212; /* Very Dark Grey Background */
             --text-dark: #ffffff; /* White text for dark mode */
@@ -47,7 +50,7 @@
             overflow-x: hidden;
         }
         .header-bg {
-            background: linear-gradient(135deg, var(--primary), #cc2900);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark, #cc2900));
             padding: 0.95rem 1rem 1.95rem 1rem;
             color: white;
             border-bottom-left-radius: 20px;
@@ -314,7 +317,11 @@
         <div class="top-bar">
             <div class="contact-info">
                 <span class="contact-label">{{ $lang == 'en' ? 'Call us' : 'Tupigie' }}</span>
-                <span class="contact-number">0762457308</span>
+                @if(!empty($branding['whatsapp']))
+                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $branding['whatsapp']) }}" class="contact-number" style="color:#fff; text-decoration:none;">{{ $branding['phone'] ?: $branding['whatsapp'] }}</a>
+                @else
+                    <a href="tel:{{ $branding['phone'] }}" class="contact-number" style="color:#fff; text-decoration:none;">{{ $branding['phone'] }}</a>
+                @endif
             </div>
             <div class="lang-toggle">
                 <a href="{{ route('portal.index', array_merge(request()->query(), ['lang' => 'en'])) }}" class="lang-btn {{ $lang == 'en' ? 'active' : '' }}">ENG</a>
@@ -323,12 +330,12 @@
         </div>
         <!-- Welcome Section -->
         <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 0.35rem; margin-bottom: 0.15rem;">
-            <div style="background: #FFFFFF; padding: 4px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; flex-shrink: 0;">
-                <img src="{{ asset('images/logo-icon.png') }}" alt="MedBando Logo" style="width: 100%; height: 100%; object-fit: contain;">
+            <div style="background: #FFFFFF; padding: 4px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; flex-shrink: 0; overflow: hidden;">
+                <img src="{{ !empty($branding['logo']) ? asset($branding['logo']) : asset('images/logo-icon.png') }}" alt="{{ $tenantName }} Logo" style="width: 100%; height: 100%; object-fit: contain;">
             </div>
             <h1 class="welcome-title" style="margin-bottom: 0;">{{ $tenantName }}</h1>
         </div>
-        <p class="welcome-sub">{{ $lang == 'en' ? 'FAST & UNLIMITED WI-FI' : 'FAST & UNLIMITED WI-FI' }}</p>
+        <p class="welcome-sub">{{ $branding['tagline'] }}</p>
     </div>
 
     <!-- Payment Methods Placeholder -->
@@ -477,7 +484,7 @@
 
             <p style="margin-top: 0.9rem; text-align: center; font-size: 0.75rem; color: #a1a1aa; line-height: 1.4;">
                 {{ $lang == 'en' ? 'Or get a voucher from the owner:' : 'Au pata vocha kwa mmiliki:' }}
-                <a href="tel:{{ $adminPhone }}" style="color: var(--primary); font-weight: 700;">{{ $adminPhone }}</a>
+                <a href="tel:{{ $branding['phone'] }}" style="color: var(--primary); font-weight: 700;">{{ $branding['phone'] }}</a>
             </p>
         </div>
     </div>

@@ -19,6 +19,7 @@
 /storage/*.key
 /storage/pail
 /vendor
+/public/uploads
 /wifi_billing_backup.sql
 /database/backups/
 Homestead.json

@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#FF3300">
-    <title>Inakuunganisha Moja kwa Moja - MedBando</title>
+    @php
+        $_t = app(\App\Services\TenantContext::class)->getTenant();
+        $_b = $_t ? $_t->branding() : ['name' => 'MedBando', 'primary_color' => '#FF3300'];
+    @endphp
+    <meta name="theme-color" content="{{ $_b['primary_color'] }}">
+    <title>Inakuunganisha Moja kwa Moja - {{ strtoupper($_b['name']) }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #FF3300;
-            --primary-glow: rgba(255, 51, 0, 0.35);
+            --primary: {{ $_b['primary_color'] }};
+            --primary-glow: {{ $_b['primary_color'] }}59;
             --success: #10B981;
             --success-glow: rgba(16, 185, 129, 0.4);
             --bg: #0c0c0e;

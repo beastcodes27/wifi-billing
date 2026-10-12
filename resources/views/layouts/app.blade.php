@@ -449,6 +449,11 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('admin.branding') }}" class="nav-link {{ request()->routeIs('admin.branding*') ? 'active' : '' }}">
+                        <i class="fas fa-palette"></i> <span>Muonekano wa Portal</span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('admin.settings') }}" class="nav-link {{ request()->routeIs('admin.settings') ? 'active' : '' }}">
                         <i class="fas fa-sliders-h"></i> <span>Mipangilio</span>
                     </a>
@@ -756,6 +761,12 @@
                     <i class="fas fa-user-lock"></i>
                 </div>
                 <span>Miunganisho</span>
+            </a>
+            <a href="{{ route('admin.branding') }}" class="drawer-btn {{ request()->routeIs('admin.branding*') ? 'active-drawer-btn' : '' }}">
+                <div class="drawer-icon-box" style="background: rgba(139, 92, 246, 0.12); color: #8B5CF6;">
+                    <i class="fas fa-palette"></i>
+                </div>
+                <span>Muonekano</span>
             </a>
             <a href="{{ route('admin.settings') }}" class="drawer-btn {{ request()->routeIs('admin.settings*') && !request()->routeIs('admin.settings.payment*') ? 'active-drawer-btn' : '' }}">
                 <div class="drawer-icon-box" style="background: rgba(100, 116, 139, 0.12); color: #475569;">

@@ -3,21 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#FF3300">
+    @php
+        $_t = app(\App\Services\TenantContext::class)->getTenant();
+        $_b = $_t ? $_t->branding() : ['name' => 'MedBando', 'primary_color' => '#FF3300'];
+    @endphp
+    <meta name="theme-color" content="{{ $_b['primary_color'] }}">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="MedBando">
-    <meta name="application-name" content="MedBando">
+    <meta name="apple-mobile-web-app-title" content="{{ strtoupper($_b['name']) }}">
+    <meta name="application-name" content="{{ strtoupper($_b['name']) }}">
     <link rel="manifest" href="{{ asset('manifest.json') }}">
-    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ !empty($_b['logo']) ? asset($_b['logo']) : asset('favicon.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
-    <title>Kuthibitisha Malipo - MedBando</title>
+    <title>Kuthibitisha Malipo - {{ strtoupper($_b['name']) }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #FF3300;
-            --primary-glow: rgba(255, 51, 0, 0.35);
+            --primary: {{ $_b['primary_color'] }};
+            --primary-glow: {{ $_b['primary_color'] }}59;
             --success: #10B981;
             --success-glow: rgba(16, 185, 129, 0.4);
             --bg: #0c0c0e;

@@ -61,4 +61,24 @@ class Tenant extends Model
 
         return ($sub && $sub->status === 'trial') ? $sub->ends_at : null;
     }
+
+    /**
+     * Guest-portal branding for this tenant (name, contact, colours, logo).
+     */
+    public function branding(): array
+    {
+        $settings = is_array($this->settings) ? $this->settings : [];
+        $b = is_array($settings['branding'] ?? null) ? $settings['branding'] : [];
+
+        return [
+            'name' => $b['display_name'] ?? ($this->business_name ?: 'MedBando'),
+            'tagline' => $b['tagline'] ?? 'FAST & UNLIMITED WI-FI',
+            'phone' => $b['contact_phone'] ?? ($this->phone ?: '0762457308'),
+            'whatsapp' => $b['whatsapp'] ?? null,
+            'email' => $b['email'] ?? $this->email,
+            'primary_color' => $b['primary_color'] ?? '#FF3300',
+            'accent_color' => $b['accent_color'] ?? '#cc2900',
+            'logo' => $b['logo'] ?? $this->logo,
+        ];
+    }
 }
