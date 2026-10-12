@@ -19,6 +19,8 @@
 /storage/*.key
 /storage/pail
 /vendor
+/wifi_billing_backup.sql
+/database/backups/
 Homestead.json
 Homestead.yaml
 Thumbs.db
