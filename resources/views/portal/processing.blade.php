@@ -24,11 +24,11 @@
             --primary-glow: {{ $_b['primary_color'] }}59;
             --success: #10B981;
             --success-glow: rgba(16, 185, 129, 0.4);
-            --bg: #0c0c0e;
-            --card-bg: rgba(24, 24, 28, 0.85);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --text-main: #FFFFFF;
-            --text-muted: #94a3b8;
+            --bg: #F1F5F9;
+            --card-bg: #FFFFFF;
+            --card-border: rgba(2, 6, 23, 0.08);
+            --text-main: #0F172A;
+            --text-muted: #64748B;
         }
 
         * {
@@ -60,7 +60,7 @@
             transform: translateX(-50%);
             width: 450px;
             height: 450px;
-            background: radial-gradient(circle, rgba(255, 51, 0, 0.18) 0%, rgba(12, 12, 14, 0) 70%);
+            background: radial-gradient(circle, rgba(255, 51, 0, 0.18) 0%, rgba(241, 245, 249, 0) 70%);
             pointer-events: none;
             z-index: 0;
         }
@@ -75,7 +75,7 @@
             border-radius: 28px;
             padding: 2.5rem 1.75rem 2rem 1.75rem;
             text-align: center;
-            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 25px 60px -15px rgba(2, 6, 23, 0.15);
             backdrop-filter: blur(20px);
             display: flex;
             flex-direction: column;
@@ -144,14 +144,14 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(2, 6, 23, 0.04);
+            border: 1px solid rgba(2, 6, 23, 0.1);
             padding: 0.35rem 0.9rem;
             border-radius: 20px;
             font-size: 0.82rem;
             font-weight: 700;
             letter-spacing: 0.5px;
-            color: #f1f5f9;
+            color: #334155;
             margin-bottom: 1.2rem;
         }
 
@@ -163,7 +163,7 @@
         h1.title {
             font-size: 1.65rem;
             font-weight: 800;
-            color: #ffffff;
+            color: var(--text-main);
             margin-bottom: 0.4rem;
             line-height: 1.2;
             letter-spacing: -0.3px;
@@ -203,13 +203,13 @@
             display: inline-flex;
             align-items: center;
             gap: 0.55rem;
-            background: rgba(0, 0, 0, 0.35);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(2, 6, 23, 0.04);
+            border: 1px solid rgba(2, 6, 23, 0.08);
             padding: 0.5rem 1.1rem;
             border-radius: 30px;
             font-size: 0.86rem;
             font-weight: 600;
-            color: #cbd5e1;
+            color: #475569;
             margin-bottom: 1.75rem;
             transition: all 0.3s;
         }
@@ -230,7 +230,7 @@
 
         .status-pill.success {
             border-color: rgba(16, 185, 129, 0.3);
-            color: #6ee7b7;
+            color: #047857;
         }
 
         @keyframes dotBlink {
@@ -259,8 +259,8 @@
             align-items: center;
             gap: 0.45rem;
             background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: #94a3b8;
+            border: 1px solid rgba(2, 6, 23, 0.12);
+            color: #64748B;
             padding: 0.55rem 1.25rem;
             border-radius: 12px;
             font-size: 0.85rem;
@@ -270,9 +270,9 @@
         }
 
         .btn-cancel:hover {
-            color: #ffffff;
-            border-color: rgba(255, 255, 255, 0.25);
-            background: rgba(255, 255, 255, 0.05);
+            color: #0F172A;
+            border-color: rgba(2, 6, 23, 0.25);
+            background: rgba(2, 6, 23, 0.04);
         }
     </style>
 </head>
@@ -352,22 +352,22 @@
             <div style="width: 58px; height: 58px; border-radius: 50%; background: rgba(16, 185, 129, 0.2); border: 2px solid #10B981; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.9rem auto;">
                 <i class="fas fa-wifi" style="font-size: 1.6rem; color: #10B981;"></i>
             </div>
-            <div style="font-size: 1.25rem; font-weight: 800; color: #ffffff; margin-bottom: 0.35rem;" id="successHeading">
+            <div style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.35rem;" id="successHeading">
                 Malipo Yamekamilika!
             </div>
 
             <!-- Prominent Voucher Display Box -->
-            <div id="voucherCard" style="background: rgba(0,0,0,0.4); border: 1.5px dashed rgba(16, 185, 129, 0.5); border-radius: 16px; padding: 0.85rem 1rem; margin: 0.85rem 0; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+            <div id="voucherCard" style="background: rgba(2,6,23,0.04); border: 1.5px dashed rgba(16, 185, 129, 0.5); border-radius: 16px; padding: 0.85rem 1rem; margin: 0.85rem 0; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
                 <div style="text-align: left;">
-                    <span style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; display: block;">Vocha Yako ya WiFi:</span>
+                    <span style="font-size: 0.72rem; color: #64748B; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; display: block;">Vocha Yako ya WiFi:</span>
                     <strong id="displayVoucher" style="font-size: 1.5rem; letter-spacing: 2px; color: #10B981; font-weight: 900;">------</strong>
                 </div>
-                <button type="button" onclick="copyVoucher()" style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: #6ee7b7; border-radius: 10px; padding: 0.5rem 0.85rem; font-size: 0.8rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                <button type="button" onclick="copyVoucher()" style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: #047857; border-radius: 10px; padding: 0.5rem 0.85rem; font-size: 0.8rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px;">
                     <i class="fas fa-copy"></i> <span id="copyVoucherText">Nakili</span>
                 </button>
             </div>
 
-            <p id="connectingText" style="font-size: 0.88rem; color: #a7f3d0; margin-bottom: 1.1rem; line-height: 1.45;">
+            <p id="connectingText" style="font-size: 0.88rem; color: #059669; margin-bottom: 1.1rem; line-height: 1.45;">
                 <i class="fas fa-spinner fa-spin" style="margin-right: 5px;"></i> Tunaandaa intaneti yako kwenye router, tafadhali subiri kidogo...
             </p>
             <button type="button" id="connectNowBtn" onclick="submitMikrotikLogin()" style="display: none; align-items: center; justify-content: center; gap: 8px; width: 100%; background: linear-gradient(135deg, #10B981, #059669); color: #ffffff; border: none; cursor: pointer; padding: 0.85rem 1.25rem; border-radius: 14px; font-weight: 800; font-size: 0.95rem; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35); transition: transform 0.2s;">

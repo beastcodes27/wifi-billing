@@ -29,13 +29,13 @@
         :root {
             --primary-orange: #FF3300;
             --primary-orange-glow: rgba(255, 51, 0, 0.4);
-            --bg-dark: #070B14;
-            --card-bg: rgba(15, 23, 42, 0.78);
-            --card-border: rgba(255, 255, 255, 0.1);
-            --text-main: #FFFFFF;
-            --text-muted: #94A3B8;
-            --input-bg: rgba(255, 255, 255, 0.05);
-            --input-border: rgba(255, 255, 255, 0.12);
+            --bg-dark: #F8FAFC;
+            --card-bg: #FFFFFF;
+            --card-border: rgba(2, 6, 23, 0.1);
+            --text-main: #0F172A;
+            --text-muted: #64748B;
+            --input-bg: #F1F5F9;
+            --input-border: rgba(2, 6, 23, 0.12);
             --success: #10B981;
             --danger: #EF4444;
             --radius-pill: 50px;
@@ -70,7 +70,7 @@
             filter: blur(100px);
             pointer-events: none;
             z-index: 0;
-            opacity: 0.6;
+            opacity: 0.35;
         }
         .ambient-orb-1 {
             width: 320px;
@@ -100,7 +100,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+            background-image: radial-gradient(rgba(2, 6, 23, 0.05) 1px, transparent 1px);
             background-size: 28px 28px;
             pointer-events: none;
             z-index: 1;
@@ -122,7 +122,7 @@
             border: 1px solid var(--card-border);
             border-radius: var(--radius-card);
             padding: 2.25rem 2rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 45px -18px rgba(2, 6, 23, 0.2), 0 0 0 1px rgba(2, 6, 23, 0.03);
             position: relative;
             overflow: hidden;
         }
@@ -181,7 +181,7 @@
             gap: 6px;
             background: rgba(16, 185, 129, 0.12);
             border: 1px solid rgba(16, 185, 129, 0.3);
-            color: #34D399;
+            color: #059669;
             padding: 3px 10px;
             border-radius: 50px;
             font-size: 0.72rem;
@@ -207,7 +207,7 @@
             font-family: 'Outfit', sans-serif;
             font-size: 1.5rem;
             font-weight: 800;
-            color: #FFFFFF;
+            color: var(--text-main);
             letter-spacing: -0.02em;
             margin-bottom: 0.25rem;
             line-height: 1.2;
@@ -250,7 +250,7 @@
             align-items: center;
             font-size: 0.82rem;
             font-weight: 700;
-            color: #CBD5E1;
+            color: #334155;
             margin-bottom: 0.5rem;
             letter-spacing: 0.2px;
         }
@@ -279,18 +279,18 @@
             border-radius: 14px;
             font-size: 16px; /* Prevents auto-zoom on iOS mobile */
             font-family: inherit;
-            color: #FFFFFF;
+            color: var(--text-main);
             transition: all 0.25s ease;
             outline: none;
         }
 
         .form-input::placeholder {
-            color: #475569;
+            color: #94A3B8;
             font-size: 0.88rem;
         }
 
         .form-input:focus {
-            background: rgba(255, 255, 255, 0.08);
+            background: #FFFFFF;
             border-color: var(--primary-orange);
             box-shadow: 0 0 0 3px rgba(255, 51, 0, 0.22);
         }
@@ -319,8 +319,8 @@
             transition: all 0.2s ease;
         }
         .password-toggle-btn:hover {
-            color: #CBD5E1;
-            background: rgba(255, 255, 255, 0.06);
+            color: #334155;
+            background: rgba(2, 6, 23, 0.05);
         }
 
         /* Remember Me Row */
@@ -345,9 +345,9 @@
             -webkit-appearance: none;
             width: 18px;
             height: 18px;
-            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            border: 1.5px solid rgba(2, 6, 23, 0.2);
             border-radius: 6px;
-            background: rgba(255, 255, 255, 0.05);
+            background: #FFFFFF;
             cursor: pointer;
             position: relative;
             transition: all 0.2s ease;
@@ -412,14 +412,14 @@
             display: inline-flex;
             align-items: center;
             gap: 0.45rem;
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(2, 6, 23, 0.03);
             padding: 0.4rem 0.85rem;
             border-radius: 50px;
             font-size: 0.72rem;
             color: #94A3B8;
             font-weight: 600;
             margin-top: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(2, 6, 23, 0.08);
         }
 
         .auth-footer {
@@ -430,7 +430,7 @@
             line-height: 1.5;
         }
         .support-link {
-            color: #CBD5E1;
+            color: #334155;
             text-decoration: none;
             font-weight: 700;
             transition: color 0.15s;

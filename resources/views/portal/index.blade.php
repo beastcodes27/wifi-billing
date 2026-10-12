@@ -28,15 +28,15 @@
         :root {
             --primary: {{ $branding['primary_color'] }}; /* Owner-configured brand colour */
             --primary-dark: {{ $branding['accent_color'] }};
-            --bg-top: #121212; /* Very Dark Grey Background */
-            --bg-bottom: #121212; /* Very Dark Grey Background */
-            --text-dark: #ffffff; /* White text for dark mode */
-            --text-muted: #a1a1aa;
-            --card-border: #3f3f46;
+            --bg-top: #F1F5F9;
+            --bg-bottom: #FFFFFF;
+            --text-dark: #0F172A;
+            --text-muted: #64748B;
+            --card-border: #E2E8F0;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
         body {
-            background-color: #000000; 
+            background-color: #F1F5F9;
             color: var(--text-dark);
             min-height: 100vh;
         }
@@ -46,7 +46,7 @@
             background: var(--bg-bottom);
             min-height: 100vh;
             position: relative;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            box-shadow: 0 0 30px rgba(2,6,23,0.08);
             overflow-x: hidden;
         }
         .header-bg {
@@ -63,7 +63,7 @@
         .contact-number { font-size: 1.05rem; font-weight: 800; letter-spacing: 0.5px; line-height: 1.1; }
         .lang-toggle { background: rgba(255,255,255,0.18); border-radius: 20px; padding: 0.15rem; display: flex; gap: 0.15rem; align-items: center; }
         .lang-btn { padding: 0.2rem 0.55rem; border-radius: 10px; font-size: 0.68rem; font-weight: 700; border: none; background: transparent; color: white; transition: all 0.2s; cursor: pointer; text-decoration: none;}
-        .lang-btn.active { background: #121212; color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.25); }
+        .lang-btn.active { background: #F8FAFC; color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.25); }
         
         .welcome-title { font-size: 1.35rem; font-weight: 900; text-align: center; margin-bottom: 0.1rem; letter-spacing: 0.5px; line-height: 1.15; }
         .welcome-sub { text-align: center; color: rgba(255,255,255,0.85); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;}
@@ -71,12 +71,12 @@
         .payment-methods {
             display: flex;
             justify-content: space-between;
-            background: #18181b;
+            background: #FFFFFF;
             padding: 0.45rem 0.85rem;
             border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid #E2E8F0;
             margin: -1.2rem 0.85rem 0.45rem 0.85rem;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 16px rgba(2,6,23,0.08);
             position: relative;
             z-index: 10;
         }
@@ -88,12 +88,12 @@
         .method-icon.tigo svg { color: #3b82f6; }
         
         .card-section {
-            background: #18181b;
-            border: 1px solid rgba(255,255,255,0.08);
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
             border-radius: 14px;
             padding: 0.65rem 0.85rem;
             margin: 0 0.85rem 0.45rem 0.85rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 10px rgba(2,6,23,0.06);
         }
         
         .section-title { display: flex; align-items: center; gap: 0.4rem; font-size: 0.84rem; font-weight: 800; margin-bottom: 0.45rem; color: var(--text-dark); }
@@ -112,7 +112,7 @@
             font-weight: 700;
             text-align: center;
             outline: none;
-            background: #121212;
+            background: #F8FAFC;
             color: var(--text-dark);
             letter-spacing: 1.2px;
             transition: border-color 0.2s;
@@ -123,7 +123,7 @@
             font-size: 0.78rem;
             font-weight: 500;
             letter-spacing: 0;
-            color: #71717a;
+            color: #64748B;
         }
         @keyframes shakeAnim {
             0%, 100% { transform: translateX(0); }
@@ -148,12 +148,12 @@
         .portal-alert.error {
             background: rgba(239, 68, 68, 0.12);
             border: 1px solid rgba(239, 68, 68, 0.3);
-            color: #fca5a5;
+            color: #B91C1C;
         }
         .portal-alert.success {
             background: rgba(16, 185, 129, 0.12);
             border: 1px solid rgba(16, 185, 129, 0.3);
-            color: #6ee7b7;
+            color: #047857;
         }
         .btn-login {
             background: var(--primary);
@@ -183,13 +183,13 @@
         .pkg-card {
             position: relative;
             overflow: hidden;
-            background: #18181b;
-            border: 1px solid rgba(255,255,255,0.08);
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
             border-radius: 12px;
             padding: 0.55rem 0.65rem;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 3px 8px rgba(2,6,23,0.06);
             cursor: pointer;
             transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
         }
@@ -210,7 +210,7 @@
             font-weight: 800;
             font-size: 0.72rem;
             text-transform: uppercase;
-            color: #a1a1aa;
+            color: #64748B;
             margin-bottom: 0.1rem;
             letter-spacing: 0.3px;
             white-space: nowrap;
@@ -218,12 +218,12 @@
             text-overflow: ellipsis;
         }
         .pkg-price-box { display: flex; align-items: baseline; gap: 0.15rem; }
-        .pkg-price { font-weight: 900; font-size: 1.18rem; color: #ffffff; line-height: 1.1; }
+        .pkg-price { font-weight: 900; font-size: 1.18rem; color: #0F172A; line-height: 1.1; }
         .pkg-currency { font-size: 0.58rem; color: var(--primary); font-weight: 800; }
         
         .pkg-features { display: flex; flex-direction: column; gap: 0.2rem; margin: 0.35rem 0 0.45rem 0; }
         .feature-badge {
-            background: #111113;
+            background: #F1F5F9;
             padding: 0.16rem 0.35rem;
             border-radius: 5px;
             font-size: 0.62rem;
@@ -231,8 +231,8 @@
             display: flex;
             align-items: center;
             gap: 0.25rem;
-            color: #a1a1aa;
-            border: 1px solid rgba(255,255,255,0.03);
+            color: #64748B;
+            border: 1px solid #E2E8F0;
         }
         .feature-badge svg {
             width: 11px;
@@ -269,7 +269,7 @@
         /* Modal Styles */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(6px);
+            background: rgba(2,6,23,0.45); backdrop-filter: blur(6px);
             display: flex; justify-content: center; align-items: center; z-index: 99999;
             opacity: 0; pointer-events: none;
             visibility: hidden;
@@ -277,12 +277,12 @@
             padding: 1rem;
         }
         .modal-content {
-            background: #18181b; width: 100%; max-width: 400px;
-            border-radius: 18px; border: 1px solid rgba(255,255,255,0.1);
+            background: #FFFFFF; width: 100%; max-width: 400px;
+            border-radius: 18px; border: 1px solid #E2E8F0;
             padding: 1.5rem 1.25rem;
             transform: scale(0.92);
             transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 25px 50px -12px rgba(2,6,23,0.2);
         }
         .modal-overlay.active {
             opacity: 1;
@@ -294,12 +294,12 @@
         }
         .close-modal {
             position: absolute; top: 1rem; right: 1.25rem; font-size: 1.6rem;
-            color: #a1a1aa; background: none; border: none; cursor: pointer;
+            color: #64748B; background: none; border: none; cursor: pointer;
             width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
             border-radius: 50%; transition: background 0.2s, color 0.2s;
         }
         .close-modal:hover {
-            color: #fff; background: rgba(255,255,255,0.1);
+            color: #0F172A; background: rgba(2,6,23,0.06);
         }
         
         /* SVG Spinner */
@@ -436,7 +436,7 @@
                     </button>
                 </div>
             @empty
-                <div style="grid-column: 1 / -1; text-align: center; padding: 1.5rem; color: var(--text-muted); background: #18181b; border-radius: 12px;">
+                <div style="grid-column: 1 / -1; text-align: center; padding: 1.5rem; color: var(--text-muted); background: #FFFFFF; border-radius: 12px;">
                     {{ $lang == 'en' ? 'No packages available.' : 'Hakuna vifurushi.' }}
                 </div>
             @endforelse
@@ -444,7 +444,7 @@
     </div>
 
     <!-- Portal Footer -->
-    <div style="text-align: center; padding: 0.75rem 1rem 1.5rem 1rem; color: #71717a; font-size: 0.72rem; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 0.6rem;">
+    <div style="text-align: center; padding: 0.75rem 1rem 1.5rem 1rem; color: #64748B; font-size: 0.72rem; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 0.6rem;">
         <div>&copy; {{ date('Y') }} {{ $tenantName }} &bull; FAST &amp; UNLIMITED WI-FI</div>
     </div>
 
@@ -452,9 +452,9 @@
     <div class="modal-overlay" id="paymentModal" onclick="if(event.target === this) closePaymentModal();">
         <div class="modal-content" style="position: relative;">
             <button class="close-modal" type="button" onclick="closePaymentModal()">&times;</button>
-            <h2 style="margin-bottom: 0.25rem; font-size: 1.2rem; font-weight: 800; color: #fff;">{{ $lang == 'en' ? 'Pay for Package' : 'Lipia Kifurushi' }}</h2>
+            <h2 style="margin-bottom: 0.25rem; font-size: 1.2rem; font-weight: 800; color: var(--text-dark);">{{ $lang == 'en' ? 'Pay for Package' : 'Lipia Kifurushi' }}</h2>
             <p style="color: var(--text-muted); margin-bottom: 0.95rem; font-size: 0.85rem;">
-                {{ $lang == 'en' ? 'Package:' : 'Kifurushi:' }} <strong id="modalPkgName" style="color: #fff;"></strong> - <strong style="color: var(--primary);">TZS <span id="modalPkgPrice"></span></strong>
+                {{ $lang == 'en' ? 'Package:' : 'Kifurushi:' }} <strong id="modalPkgName" style="color: var(--text-dark);"></strong> - <strong style="color: var(--primary);">TZS <span id="modalPkgPrice"></span></strong>
             </p>
             
             <form action="{{ route('portal.process') }}" method="POST" id="paymentForm" onsubmit="handlePaymentSubmit(event)">
@@ -466,13 +466,13 @@
                 <input type="hidden" name="link_orig" value="{{ $linkOrig ?? 'http://www.google.com' }}">
                 
                 <div style="margin-bottom: 0.95rem;">
-                    <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #d4d4d8; margin-bottom: 0.35rem; text-align: left;">
+                    <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem; text-align: left;">
                         {{ $lang == 'en' ? 'Enter Mobile Money Phone Number' : 'Weka Namba ya Simu ya Malipo' }}
                     </label>
                     <input type="tel" name="phone_number" id="modalPhoneInput" required placeholder="07XXXXXXXX" 
-                           style="width: 100%; padding: 0.65rem 0.85rem; border: 1.5px solid var(--card-border); border-radius: 10px; font-size: 1.05rem; font-weight: 700; outline: none; background: #121212; color: var(--text-dark); transition: border-color 0.3s;"
+                           style="width: 100%; padding: 0.65rem 0.85rem; border: 1.5px solid var(--card-border); border-radius: 10px; font-size: 1.05rem; font-weight: 700; outline: none; background: #F8FAFC; color: var(--text-dark); transition: border-color 0.3s;"
                            onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--card-border)'">
-                    <small style="display: block; text-align: left; color: #a1a1aa; font-size: 0.72rem; margin-top: 0.35rem;">
+                    <small style="display: block; text-align: left; color: #64748B; font-size: 0.72rem; margin-top: 0.35rem;">
                         <i class="fas fa-mobile-alt"></i> M-Pesa &bull; TigoPesa &bull; Airtel Money &bull; HaloPesa
                     </small>
                 </div>
@@ -482,7 +482,7 @@
                 </button>
             </form>
 
-            <p style="margin-top: 0.9rem; text-align: center; font-size: 0.75rem; color: #a1a1aa; line-height: 1.4;">
+            <p style="margin-top: 0.9rem; text-align: center; font-size: 0.75rem; color: #64748B; line-height: 1.4;">
                 {{ $lang == 'en' ? 'Or get a voucher from the owner:' : 'Au pata vocha kwa mmiliki:' }}
                 <a href="tel:{{ $branding['phone'] }}" style="color: var(--primary); font-weight: 700;">{{ $branding['phone'] }}</a>
             </p>

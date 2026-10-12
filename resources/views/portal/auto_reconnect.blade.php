@@ -17,11 +17,11 @@
             --primary-glow: {{ $_b['primary_color'] }}59;
             --success: #10B981;
             --success-glow: rgba(16, 185, 129, 0.4);
-            --bg: #0c0c0e;
-            --card-bg: rgba(24, 24, 28, 0.9);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --text-main: #FFFFFF;
-            --text-muted: #94a3b8;
+            --bg: #F1F5F9;
+            --card-bg: #FFFFFF;
+            --card-border: rgba(2, 6, 23, 0.08);
+            --text-main: #0F172A;
+            --text-muted: #64748B;
         }
 
         * {
@@ -52,7 +52,7 @@
             transform: translateX(-50%);
             width: 450px;
             height: 450px;
-            background: radial-gradient(circle, rgba(255, 51, 0, 0.16) 0%, rgba(12, 12, 14, 0) 70%);
+            background: radial-gradient(circle, rgba(255, 51, 0, 0.16) 0%, rgba(241, 245, 249, 0) 70%);
             pointer-events: none;
             z-index: 0;
         }
@@ -67,7 +67,7 @@
             border-radius: 28px;
             padding: 2.25rem 1.75rem 2rem 1.75rem;
             text-align: center;
-            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 25px 60px -15px rgba(2, 6, 23, 0.15);
             backdrop-filter: blur(20px);
             display: flex;
             flex-direction: column;
@@ -140,7 +140,7 @@
         h1.title {
             font-size: 1.55rem;
             font-weight: 800;
-            color: #ffffff;
+            color: var(--text-main);
             margin-bottom: 0.4rem;
             line-height: 1.25;
         }
@@ -154,8 +154,8 @@
 
         .package-info-box {
             width: 100%;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.07);
+            background: rgba(2, 6, 23, 0.04);
+            border: 1px solid rgba(2, 6, 23, 0.08);
             border-radius: 16px;
             padding: 1rem;
             margin-bottom: 1.5rem;
@@ -180,7 +180,7 @@
         }
 
         .info-val {
-            color: #ffffff;
+            color: var(--text-main);
             font-weight: 700;
         }
 
@@ -219,7 +219,7 @@
         }
 
         .btn-change-plan:hover {
-            color: #ffffff;
+            color: #0F172A;
         }
     </style>
 </head>
