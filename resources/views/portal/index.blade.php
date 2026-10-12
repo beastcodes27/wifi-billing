@@ -474,6 +474,11 @@
                     <i class="fas fa-lock" style="margin-right: 6px;"></i> {{ $lang == 'en' ? 'Confirm Payment (PIN)' : 'Thibitisha Malipo (PIN)' }}
                 </button>
             </form>
+
+            <p style="margin-top: 0.9rem; text-align: center; font-size: 0.75rem; color: #a1a1aa; line-height: 1.4;">
+                {{ $lang == 'en' ? 'Or get a voucher from the owner:' : 'Au pata vocha kwa mmiliki:' }}
+                <a href="tel:{{ $adminPhone }}" style="color: var(--primary); font-weight: 700;">{{ $adminPhone }}</a>
+            </p>
         </div>
     </div>
     

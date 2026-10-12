@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Package;
-use App\Services\FimiPayService;
+use App\Services\SonicPesaService;
+use App\Services\HotspotProvisioner;
 use Illuminate\Support\Facades\Log;
 
 class PortalController extends Controller
@@ -164,7 +165,7 @@ class PortalController extends Controller
         $packages = Package::where('is_active', true)->get();
 
         $tenant = app(\App\Services\TenantContext::class)->getTenant();
-        // Online payment via FimiPay is active
+        // Online payment via SonicPesa is active
         $hasAutoPayment = true;
         $adminPhone = '0762457308'; // Default fallback
 
@@ -253,7 +254,7 @@ class PortalController extends Controller
         ]);
     }
 
-    public function processPayment(Request $request, FimiPayService $fimiPayService)
+    public function processPayment(Request $request, SonicPesaService $sonic)
     {
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
             'phone_number' => 'required|string',
@@ -281,7 +282,7 @@ class PortalController extends Controller
         $transactionRef = 'TXN-' . strtoupper(uniqid());
 
         // Format phone number
-        $phone = $fimiPayService->formatPhone($request->phone_number);
+        $phone = $sonic->normalizePhone($request->phone_number);
 
         $mac = $request->input('mac_address', '');
         $ip = $request->input('ip_address', '');
@@ -307,21 +308,19 @@ class PortalController extends Controller
             'mac' => $mac,
         ]);
 
-        // Initiate payment via FimiPay API
-        $res = $fimiPayService->createOrder(
-            phone: $phone,
-            amount: $package->price,
-            reference: $transactionRef,
-            metadata: $metadata,
-            name: 'Mteja WiFi',
-            email: "mteja{$phone}@sayuni.co.tz",
-            tenant: $tenant
-        );
+        // Initiate payment via SonicPesa API
+        $res = $sonic->createOrder([
+            'phone' => $phone,
+            'amount' => $package->price,
+            'buyer_name' => 'Mteja WiFi',
+            'buyer_email' => "mteja{$phone}@medbando.app",
+        ]);
 
-        if ($res['success'] && !empty($res['order_id'])) {
-            $orderId = $res['order_id'];
+        $orderId = $sonic->extractOrderId($res);
 
-            Log::info("[PAYMENT] FimiPay payment order created", [
+        if (($res['_http_status'] ?? 0) >= 200 && ($res['_http_status'] ?? 0) < 300 && !empty($orderId)) {
+
+            Log::info("[PAYMENT] SonicPesa payment order created", [
                 'transaction_reference' => $transactionRef,
                 'order_id' => $orderId,
                 'amount' => $package->price,
@@ -333,10 +332,9 @@ class PortalController extends Controller
             \App\Models\Transaction::create([
                 'tenant_id' => $resolvedTenantId,
                 'transaction_reference' => $transactionRef,
-                'palm_pesa_order_id' => $orderId, // backward-compat
                 'gateway_transaction_id' => $orderId,
-                'payment_gateway' => 'fimipay',
-                'payment_method' => 'fimipay',
+                'payment_gateway' => 'sonicpesa',
+                'payment_method' => 'sonicpesa',
                 'phone_number' => $request->phone_number,
                 'amount' => $package->price,
                 'status' => 'pending',
@@ -362,9 +360,9 @@ class PortalController extends Controller
         }
 
         $errorMsg = $res['message'] ?? 'Malipo yameshindwa kuanza. Tafadhali jaribu tena.';
-        Log::error("[ERROR] FimiPay payment order creation failed", [
+        Log::error("[ERROR] SonicPesa payment order creation failed", [
             'phone' => $phone,
-            'message' => $errorMsg,
+            'response' => $res,
         ]);
         return redirect()->route('portal.index')->with('error', $errorMsg);
     }
@@ -402,159 +400,42 @@ class PortalController extends Controller
         ]);
     }
 
-    public function checkStatus($transactionRef, FimiPayService $fimiPayService)
+    public function checkStatus($transactionRef, SonicPesaService $sonic, HotspotProvisioner $provisioner)
     {
         $transaction = \App\Models\Transaction::withoutGlobalScopes()->where('transaction_reference', $transactionRef)->first();
         if (!$transaction) {
             return response()->json(['status' => 'failed']);
         }
-        
+
         $orderId = $transaction->gateway_transaction_id ?: $transaction->palm_pesa_order_id;
 
         if ($transaction->status === 'pending' && $orderId) {
             try {
-                $tenant = $transaction->tenant_id 
-                    ? \App\Models\Tenant::find($transaction->tenant_id) 
+                $tenant = $transaction->tenant_id
+                    ? \App\Models\Tenant::find($transaction->tenant_id)
                     : (app(\App\Services\TenantContext::class)->getTenant() ?: \App\Models\Tenant::find(1));
                 if ($tenant) {
                     app(\App\Services\TenantContext::class)->setTenant($tenant);
                 }
-                
-                $isSuccessfulPayment = false;
-                $isFailedPayment = false;
-                $paymentStatus = 'PENDING';
 
-                // Primary: FimiPay Gateway
-                if ($transaction->payment_gateway === 'fimipay' || empty($transaction->payment_gateway)) {
-                    $res = $fimiPayService->getOrderStatus($orderId, $tenant);
-                    $paymentStatus = strtoupper($res['payment_status'] ?? 'PENDING');
-                    $isSuccessfulPayment = !empty($res['is_paid']);
-                    $isFailedPayment = ($res['status'] ?? '') === 'FAILED';
-                } else {
-                    // Fallback for legacy Palm Pesa transactions
-                    $apiKey = $tenant->settings['palmpesa']['api_key'] ?? env('PALM_PESA_API_KEY');
-                    $response = \Illuminate\Support\Facades\Http::withToken($apiKey)
-                        ->post(env('PALM_PESA_BASE_URL') . '/order-status', [
-                            'order_id' => $orderId
-                        ]);
-
-                    $responseData = $response->json();
-                    if (isset($responseData['data'][0]['payment_status'])) {
-                        $paymentStatus = strtoupper($responseData['data'][0]['payment_status']);
-                    }
-                    $isSuccessfulPayment = in_array($paymentStatus, ['COMPLETED', 'PAID', 'SETTLED', 'SUCCESSFUL'], true);
-                    $isFailedPayment = in_array($paymentStatus, ['FAILED', 'CANCELLED', 'EXPIRED', 'REJECTED'], true);
-                }
+                $res = $sonic->orderStatus($orderId);
+                $paymentStatus = $sonic->extractStatus($res);
+                $isSuccessfulPayment = in_array($paymentStatus, ['COMPLETED', 'SUCCESS'], true);
+                $isFailedPayment = in_array($paymentStatus, ['FAILED', 'CANCELLED', 'USERCANCELLED', 'REJECTED', 'EXPIRED'], true);
 
                 if ($isSuccessfulPayment) {
-                    $transaction->status = 'success';
-                    
-                    // Only generate voucher & wifi_user if not already created (idempotent)
-                    if (empty($transaction->mikrotik_voucher)) {
-                        $package = $transaction->package;
-                        $voucherCode = (string) mt_rand(100000, 999999);
-                        
-                        // Link or auto-create customer record
-                        $customer = \App\Models\Customer::withoutGlobalScopes()->where('phone_number', $transaction->phone_number)->first();
-                        if (!$customer && !empty($transaction->phone_number)) {
-                            $customer = \App\Models\Customer::create([
-                                'tenant_id' => $tenant ? $tenant->id : 1,
-                                'phone_number' => $transaction->phone_number,
-                                'name' => 'Mteja ' . substr($transaction->phone_number, -4),
-                                'status' => 'active',
-                            ]);
-                        }
-                        if ($customer) {
-                            $transaction->customer_id = $customer->id;
-                        }
-
-                        // Retrieve MAC and IP from transaction notes
-                        $deviceNotes = [];
-                        if (!empty($transaction->notes)) {
-                            $deviceNotes = json_decode($transaction->notes, true) ?: [];
-                        }
-
-                        $durationMinutes = $package ? $package->duration_minutes : 60;
-                        $expiresAt = now()->addMinutes($durationMinutes);
-
-                        $wifiUser = \App\Models\WifiUser::create([
-                            'tenant_id' => $tenant ? $tenant->id : 1,
-                            'customer_id' => $customer ? $customer->id : null,
-                            'phone_number' => $transaction->phone_number,
-                            'mac_address' => $deviceNotes['mac'] ?? null,
-                            'ip_address' => $deviceNotes['ip'] ?? null,
-                            'mikrotik_username' => $voucherCode,
-                            'mikrotik_password' => $voucherCode,
-                            'package_id' => $package ? $package->id : null,
-                            'payment_type' => 'fimipay',
-                            'expires_at' => $expiresAt
-                        ]);
-                        
-                        $subscription = null;
-                        if ($package && $customer) {
-                            $subscription = \App\Models\Subscription::create([
-                                'tenant_id' => $tenant ? $tenant->id : 1,
-                                'customer_id' => $customer->id,
-                                'wifi_user_id' => $wifiUser->id,
-                                'package_id' => $package->id,
-                                'transaction_id' => $transaction->id,
-                                'type' => 'new',
-                                'status' => 'active',
-                                'starts_at' => now(),
-                                'expires_at' => $expiresAt,
-                                'notes' => 'FimiPay Auto-Provision'
-                            ]);
-                        }
-
-                        // Create Voucher record for tracking
-                        \App\Models\Voucher::create([
-                            'tenant_id' => $tenant ? $tenant->id : 1,
-                            'code' => $voucherCode,
-                            'wifi_user_id' => $wifiUser->id,
-                            'transaction_id' => $transaction->id,
-                            'status' => 'available'
-                        ]);
-
-                        $transaction->wifi_user_id = $wifiUser->id;
-                        $transaction->mikrotik_voucher = $voucherCode;
-
-                        // Save voucher to cookie for auto-reconnect
+                    $voucherCode = $provisioner->provision($transaction);
+                    if ($voucherCode) {
+                        $durationMinutes = $transaction->package ? $transaction->package->duration_minutes : 60;
                         \Illuminate\Support\Facades\Cookie::queue('medbando_active_voucher', $voucherCode, $durationMinutes);
                         session(['active_voucher' => $voucherCode]);
-
-                        Log::info("[PAYMENT SUCCESS] Payment verified successfully via FimiPay", [
-                            'transaction_reference' => $transaction->transaction_reference,
-                            'order_id' => $orderId,
-                            'phone_number' => $transaction->phone_number,
-                            'amount' => $transaction->amount,
-                            'payment_status' => $paymentStatus,
-                            'verified_status' => 'SUCCESS',
-                        ]);
-
-                        Log::info("[PROVISION] Hotspot WifiUser provisioned for MikroTik sync", [
-                            'wifi_user_id' => $wifiUser->id,
-                            'mikrotik_username' => $voucherCode,
-                            'phone' => $transaction->phone_number,
-                            'mac_address' => $wifiUser->mac_address,
-                            'ip_address' => $wifiUser->ip_address,
-                            'expires_at' => $expiresAt->toDateTimeString(),
-                        ]);
-
-                        if ($subscription) {
-                            Log::info("[SUBSCRIPTION] Active subscription created", [
-                                'subscription_id' => $subscription->id,
-                                'package_id' => $package->id,
-                                'package_name' => $package->name,
-                                'duration_minutes' => $durationMinutes,
-                                'starts_at' => $subscription->starts_at->toDateTimeString(),
-                                'expires_at' => $subscription->expires_at->toDateTimeString(),
-                                'status' => 'active',
-                            ]);
-                        }
                     }
 
-                    // Notice: provisioned_at remains NULL until MikroTik router polls /api/mikrotik/sync and confirms /api/mikrotik/done
-                    $transaction->save();
+                    Log::info("[PAYMENT SUCCESS] Payment verified via SonicPesa", [
+                        'transaction_reference' => $transaction->transaction_reference,
+                        'order_id' => $orderId,
+                        'payment_status' => $paymentStatus,
+                    ]);
                 } elseif ($isFailedPayment) {
                     $transaction->status = 'failed';
                     $transaction->save();
@@ -562,20 +443,18 @@ class PortalController extends Controller
                     Log::warning("[PAYMENT] Payment failed or cancelled", [
                         'transaction_reference' => $transaction->transaction_reference,
                         'payment_status' => $paymentStatus,
-                        'verified_status' => 'FAILED',
                     ]);
                 } else {
-                    Log::info("[PAYMENT] Payment status pending - user access denied until confirmed", [
+                    Log::info("[PAYMENT] Payment pending - access denied until confirmed", [
                         'transaction_reference' => $transaction->transaction_reference,
                         'payment_status' => $paymentStatus,
-                        'verified_status' => 'PENDING',
                     ]);
                 }
             } catch (\Exception $e) {
-                Log::error('[ERROR] FimiPay status check exception: ' . $e->getMessage());
+                Log::error('[ERROR] SonicPesa status check exception: ' . $e->getMessage());
             }
         }
-        
+
         return response()->json([
             'status' => $transaction->status,
             'voucher' => $transaction->status === 'success' ? $transaction->mikrotik_voucher : null,
