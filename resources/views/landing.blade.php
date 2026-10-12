@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="sw">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#070B14">
-    <meta name="description" content="MedBando — mfumo wa kisasa wa kuendesha biashara ya WiFi. Vocha, malipo ya mobile money, na ripoti zote mahali pamoja.">
+    <meta name="description" content="{{ __('landing.meta_desc') }}">
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
-    <title>MedBando — Endesha Biashara Yako ya WiFi kwa Urahisi</title>
+    <title>{{ __('landing.meta_title') }}</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -136,15 +136,15 @@
                 MedBando
             </a>
             <div class="nav-links" id="navLinks">
-                <a href="#features">Vipengele</a>
-                <a href="#how">Jinsi Inavyofanya Kazi</a>
-                <a href="#pricing">Bei</a>
-                <a href="{{ route('owner.login') }}">Ingia</a>
+                <a href="#features">{{ __('landing.nav_features') }}</a>
+                <a href="#how">{{ __('landing.nav_how') }}</a>
+                <a href="#pricing">{{ __('landing.nav_pricing') }}</a>
+                <a href="{{ route('owner.login') }}">{{ __('landing.nav_login') }}</a>
+                @include('partials.lang-switch')
             </div>
             <div class="nav-cta">
-                <a href="{{ route('owner.register') }}" class="btn btn-primary" style="display:none;" id="navDesktopCta">Anza Sasa</a>
-                <a href="{{ route('owner.register') }}" class="btn btn-primary d-none d-md-inline-flex" id="navCta">Anza Sasa</a>
-                <button class="menu-toggle" id="menuToggle" aria-label="Menyu"><i class="fas fa-bars"></i></button>
+                <a href="{{ route('owner.register') }}" class="btn btn-primary" id="navCta">{{ __('landing.nav_start') }}</a>
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
             </div>
         </div>
     </nav>
@@ -152,18 +152,18 @@
     <!-- Hero -->
     <section class="hero">
         <div class="wrap">
-            <span class="pill"><span class="dot"></span> Imethibitishwa na wamiliki wa WiFi Tanzania</span>
-            <h1>Endesha biashara yako ya <span>WiFi</span> kwa urahisi</h1>
-            <p>Vocha, malipo ya mobile money, na ripoti za mapato — vyote mahali pamoja. Fuatilia biashara yako mahali popote ulipo.</p>
+            <span class="pill"><span class="dot"></span> {{ __('landing.hero_pill') }}</span>
+            <h1>{{ __('landing.hero_title_a') }} <span>{{ __('landing.hero_title_b') }}</span> {{ __('landing.hero_title_c') }}</h1>
+            <p>{{ __('landing.hero_sub') }}</p>
             <div class="hero-cta">
-                <a href="{{ route('owner.register') }}" class="btn btn-primary"><i class="fas fa-rocket"></i> Fungua Akaunti Bure</a>
-                <a href="#how" class="btn btn-ghost"><i class="fas fa-circle-play"></i> Jifunze Zaidi</a>
+                <a href="{{ route('owner.register') }}" class="btn btn-primary"><i class="fas fa-rocket"></i> {{ __('landing.hero_cta_primary') }}</a>
+                <a href="#how" class="btn btn-ghost"><i class="fas fa-circle-play"></i> {{ __('landing.hero_cta_secondary') }}</a>
             </div>
             <div class="hero-stats">
-                <div class="stat"><b>MikroTik</b><span>Msaada Kamili</span></div>
-                <div class="stat"><b>5+</b><span>Njia za Malipo</span></div>
-                <div class="stat"><b>Popote</b><span>Fuatilia Uko Wote</span></div>
-                <div class="stat"><b>Mwezi 1</b><span>Jaribio la Bure</span></div>
+                <div class="stat"><b>{{ __('landing.stat_mikrotik') }}</b><span>{{ __('landing.stat_mikrotik_sub') }}</span></div>
+                <div class="stat"><b>{{ __('landing.stat_providers') }}</b><span>{{ __('landing.stat_providers_sub') }}</span></div>
+                <div class="stat"><b>{{ __('landing.stat_anywhere') }}</b><span>{{ __('landing.stat_anywhere_sub') }}</span></div>
+                <div class="stat"><b>{{ __('landing.stat_trial') }}</b><span>{{ __('landing.stat_trial_sub') }}</span></div>
             </div>
         </div>
     </section>
@@ -172,16 +172,16 @@
     <section class="features" id="features">
         <div class="wrap">
             <div class="section-head">
-                <h2>Kila Kitu cha Kufaidika na WiFi</h2>
-                <p>Malipo ya kuaminika, ripoti za wazi, na udhibiti kamili kutoka jukwaa moja.</p>
+                <h2>{{ __('landing.features_title') }}</h2>
+                <p>{{ __('landing.features_sub') }}</p>
             </div>
             <div class="feature-grid">
-                <div class="feature"><div class="ico"><i class="fas fa-tags"></i></div><h3>Portal Yenye Chapa Yako</h3><p>Nembo, rangi na vifurushi vyako vinaonekana kwenye ukurasa wa mgeni.</p></div>
-                <div class="feature"><div class="ico"><i class="fas fa-mobile-screen-button"></i></div><h3>Mobile Money</h3><p>M-Pesa, Tigo Pesa, Airtel Money na Halopesa — malipo ya papo hapo.</p></div>
-                <div class="feature"><div class="ico"><i class="fas fa-ticket"></i></div><h3>Vocha</h3><p>Tengeneza vocha kwa wingi kwa muda na bei unayotaka.</p></div>
-                <div class="feature"><div class="ico"><i class="fas fa-network-wired"></i></div><h3>MikroTik HotSpot</h3><p>Msaada kamili wa RouterOS. Bandika script moja na uanze kutengeneza mapato.</p></div>
-                <div class="feature"><div class="ico"><i class="fas fa-location-dot"></i></div><h3>Maeneo Mengi</h3><p>Hotspot nyingi chini ya akaunti moja ya mmiliki.</p></div>
-                <div class="feature"><div class="ico"><i class="fas fa-chart-line"></i></div><h3>Ripoti</h3><p>Mapato ya vocha na malipo ya simu kwa TZS.</p></div>
+                <div class="feature"><div class="ico"><i class="fas fa-tags"></i></div><h3>{{ __('landing.f1_t') }}</h3><p>{{ __('landing.f1_d') }}</p></div>
+                <div class="feature"><div class="ico"><i class="fas fa-mobile-screen-button"></i></div><h3>{{ __('landing.f2_t') }}</h3><p>{{ __('landing.f2_d') }}</p></div>
+                <div class="feature"><div class="ico"><i class="fas fa-ticket"></i></div><h3>{{ __('landing.f3_t') }}</h3><p>{{ __('landing.f3_d') }}</p></div>
+                <div class="feature"><div class="ico"><i class="fas fa-network-wired"></i></div><h3>{{ __('landing.f4_t') }}</h3><p>{{ __('landing.f4_d') }}</p></div>
+                <div class="feature"><div class="ico"><i class="fas fa-location-dot"></i></div><h3>{{ __('landing.f5_t') }}</h3><p>{{ __('landing.f5_d') }}</p></div>
+                <div class="feature"><div class="ico"><i class="fas fa-chart-line"></i></div><h3>{{ __('landing.f6_t') }}</h3><p>{{ __('landing.f6_d') }}</p></div>
             </div>
         </div>
     </section>
@@ -190,13 +190,13 @@
     <section class="steps" id="how">
         <div class="wrap">
             <div class="section-head">
-                <h2>Hatua Tatu Kuanza Kupata Mapato</h2>
-                <p>Kutoka usajili hadi mapato ya kwanza ndani ya dakika chache.</p>
+                <h2>{{ __('landing.how_title') }}</h2>
+                <p>{{ __('landing.how_sub') }}</p>
             </div>
             <div class="step-grid">
-                <div class="step"><div class="num">1</div><h3>Fungua Akaunti</h3><p>Jisajili kwa dakika moja. Unapata mwezi mmoja wa bure kujaribu kila kitu.</p></div>
-                <div class="step"><div class="num">2</div><h3>Weka Bei Zako</h3><p>Bainisha vifurushi. Wezesha vocha, malipo ya simu, au vyote viwili.</p></div>
-                <div class="step"><div class="num">3</div><h3>Pata Mapato</h3><p>Wageni wanalipa na kuingia mtandaoni papo hapo. Fuatilia kila kitu.</p></div>
+                <div class="step"><div class="num">1</div><h3>{{ __('landing.s1_t') }}</h3><p>{{ __('landing.s1_d') }}</p></div>
+                <div class="step"><div class="num">2</div><h3>{{ __('landing.s2_t') }}</h3><p>{{ __('landing.s2_d') }}</p></div>
+                <div class="step"><div class="num">3</div><h3>{{ __('landing.s3_t') }}</h3><p>{{ __('landing.s3_d') }}</p></div>
             </div>
         </div>
     </section>
@@ -205,56 +205,55 @@
     <section class="pricing" id="pricing">
         <div class="wrap">
             <div class="section-head">
-                <h2>Bei Rahisi</h2>
-                <p>Anza na mwezi mmoja wa bure. Kisha chagua kifurushi kinachokufaa.</p>
+                <h2>{{ __('landing.pricing_title') }}</h2>
+                <p>{{ __('landing.pricing_sub') }}</p>
             </div>
             <div class="price-grid">
                 @forelse($plans as $i => $plan)
                 <div class="price-card {{ $i === 1 ? 'featured' : '' }}">
                     <h3>{{ $plan->name }}</h3>
-                    <div class="desc">{{ $plan->description ?: 'Kifurushi cha biashara ya WiFi' }}</div>
-                    <div class="amount">TSh {{ number_format($plan->price) }} <small>/ {{ $plan->billing_cycle_months > 1 ? $plan->billing_cycle_months.' miezi' : 'mwezi' }}</small></div>
+                    <div class="desc">{{ $plan->description ?: __('landing.plan_business_desc') }}</div>
+                    <div class="amount">TSh {{ number_format($plan->price) }} <small>/ {{ $plan->billing_cycle_months > 1 ? __('landing.plan_months', ['n' => $plan->billing_cycle_months]) : __('landing.plan_per_month') }}</small></div>
                     <ul>
-                        <li><i class="fas fa-check-circle"></i><span>Routers hadi <strong>{{ number_format($plan->max_routers) }}</strong></span></li>
-                        <li><i class="fas fa-check-circle"></i><span>Wateja hadi <strong>{{ number_format($plan->max_customers) }}</strong></span></li>
-                        <li><i class="fas fa-check-circle"></i><span>Vocha, portal ya chapa &amp; ripoti</span></li>
-                        <li><i class="fas fa-check-circle"></i><span>Malipo ya mobile money</span></li>
+                        <li><i class="fas fa-check-circle"></i><span>{!! __('landing.plan_routers', ['n' => '<strong>'.number_format($plan->max_routers).'</strong>']) !!}</span></li>
+                        <li><i class="fas fa-check-circle"></i><span>{!! __('landing.plan_customers', ['n' => '<strong>'.number_format($plan->max_customers).'</strong>']) !!}</span></li>
+                        <li><i class="fas fa-check-circle"></i><span>{{ __('landing.plan_features') }}</span></li>
+                        <li><i class="fas fa-check-circle"></i><span>{{ __('landing.plan_payments') }}</span></li>
                     </ul>
-                    <a href="{{ route('owner.register', ['plan' => $plan->id]) }}" class="btn {{ $i === 1 ? 'btn-primary' : 'btn-ghost' }}">Chagua Kifurushi</a>
+                    <a href="{{ route('owner.register', ['plan' => $plan->id]) }}" class="btn {{ $i === 1 ? 'btn-primary' : 'btn-ghost' }}">{{ __('landing.plan_choose') }}</a>
                 </div>
                 @empty
                 <div class="price-card featured" style="grid-column: 1 / -1;">
-                    <h3>Kifurushi cha Kuanzia</h3>
-                    <div class="desc">Fungua akaunti yako leo na upate mwezi wa kwanza bure.</div>
-                    <div class="amount">Bure <small>/ mwezi wa 1</small></div>
+                    <h3>{{ __('landing.s1_t') }}</h3>
+                    <div class="desc">{{ __('landing.cta_sub') }}</div>
+                    <div class="amount">{{ __('landing.plan_free') }} <small>/ {{ __('landing.plan_first_month') }}</small></div>
                     <ul>
-                        <li><i class="fas fa-check-circle"></i><span>Routers zote na wateja</span></li>
-                        <li><i class="fas fa-check-circle"></i><span>Vocha, portal ya chapa &amp; ripoti</span></li>
-                        <li><i class="fas fa-check-circle"></i><span>Malipo ya mobile money</span></li>
+                        <li><i class="fas fa-check-circle"></i><span>{{ __('landing.plan_features') }}</span></li>
+                        <li><i class="fas fa-check-circle"></i><span>{{ __('landing.plan_payments') }}</span></li>
                     </ul>
-                    <a href="{{ route('owner.register') }}" class="btn btn-primary">Anza Sasa</a>
+                    <a href="{{ route('owner.register') }}" class="btn btn-primary">{{ __('landing.nav_start') }}</a>
                 </div>
                 @endforelse
             </div>
-            <p class="trial-note"><i class="fas fa-gift"></i> Kila akaunti mpya inapata <strong>kipindi cha majaribio cha bure</strong> — hakuna kadi ya benki inayohitajika.</p>
+            <p class="trial-note"><i class="fas fa-gift"></i> {{ __('landing.trial_note') }}</p>
         </div>
     </section>
 
     <!-- CTA -->
     <section class="wrap">
         <div class="cta-band">
-            <h2>Uko tayari kuanza kupata mapato?</h2>
-            <p>Fungua akaunti yako leo na uanze kuendesha biashara yako ya WiFi kwa urahisi.</p>
-            <a href="{{ route('owner.register') }}" class="btn btn-primary"><i class="fas fa-arrow-right"></i> Fungua Akaunti Bure</a>
+            <h2>{{ __('landing.cta_title') }}</h2>
+            <p>{{ __('landing.cta_sub') }}</p>
+            <a href="{{ route('owner.register') }}" class="btn btn-primary"><i class="fas fa-arrow-right"></i> {{ __('landing.cta_btn') }}</a>
         </div>
     </section>
 
     <footer>
         <div class="wrap">
-            <div>&copy; {{ date('Y') }} MedBando. Haki zote zimehifadhiwa.</div>
+            <div>&copy; {{ date('Y') }} MedBando. {{ __('landing.footer_rights') }}</div>
             <div style="margin-top:.6rem;">
-                <a href="{{ route('owner.login') }}">Ingia</a> &nbsp;·&nbsp;
-                <a href="{{ route('owner.register') }}">Jisajili</a>
+                <a href="{{ route('owner.login') }}">{{ __('landing.footer_login') }}</a> &nbsp;·&nbsp;
+                <a href="{{ route('owner.register') }}">{{ __('landing.footer_register') }}</a>
             </div>
         </div>
     </footer>

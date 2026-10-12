@@ -1,0 +1,41 @@
+<?php
+
+return [
+    // Register
+    'title_register' => 'Jisajili — MedBando',
+    'back_home' => 'Nyumbani',
+    'register_h1' => 'Fungua Akaunti ya Biashara',
+    'register_sub' => 'Anza kuendesha biashara yako ya WiFi leo',
+    'trial_pill' => 'Mwezi 1 wa Bure',
+    'business_name' => 'Jina la Biashara',
+    'owner_name' => 'Jina Lako',
+    'phone' => 'Namba ya Simu',
+    'email' => 'Barua Pepe',
+    'password' => 'Nenosiri',
+    'password_confirm' => 'Rudia Nenosiri',
+    'business_name_ph' => 'Mfano: Mama Asha WiFi',
+    'name_ph' => 'Jina kamili',
+    'phone_ph' => '07XXXXXXXX',
+    'email_ph' => 'wewe@biashara.com',
+    'password_ph' => 'Angalau herufi 8',
+    'password_confirm_ph' => 'Rudia nenosiri',
+    'choose_plan' => 'Chagua Kifurushi',
+    'plan_meta' => 'Routers :routers · Wateja :customers',
+    'submit_register' => 'Fungua Akaunti Yangu',
+    'have_account' => 'Tayari una akaunti?',
+    'login_here' => 'Ingia hapa',
+    'no_plans' => 'Hakuna vifurushi vinavyopatikana kwa sasa. Tafadhali jaribu tena baadaye.',
+    'registering' => 'Inasajili...',
+
+    // Login
+    'title_login' => 'Ingia',
+    'system_online' => 'Mfumo Hewani',
+    'login_sub' => 'Ingia kusimamia mtandao, vocha na miamala',
+    'remember' => 'Nikumbuke kwenye kifaa hiki',
+    'submit_login' => 'Ingia Kwenye Dashibodi',
+    'secure' => '256-Bit SSL • Salama Kabisa',
+    'no_account' => 'Huna akaunti ya biashara?',
+    'register_here' => 'Jisajili hapa',
+    'need_help' => 'Unahitaji msaada?',
+    'logging_in' => 'Inaingia...',
+];

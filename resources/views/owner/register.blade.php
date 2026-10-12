@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="sw">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#070B14">
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
-    <title>Jisajili — MedBando</title>
+    <title>{{ __('auth.title_register') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -67,13 +67,14 @@
 
     <div class="container">
         <div class="card">
-            <a href="{{ route('landing') }}" class="back"><i class="fas fa-arrow-left"></i> Nyumbani</a>
+            <a href="{{ route('landing') }}" class="back"><i class="fas fa-arrow-left"></i> {{ __('auth.back_home') }}</a>
 
             <div class="brand-header">
                 <div class="logo-wrap"><img src="{{ asset('images/logo.png') }}" alt="MedBando"></div>
-                <h1>Fungua Akaunti ya Biashara</h1>
-                <p class="sub">Anza kuendesha biashara yako ya WiFi leo</p>
-                <div><span class="trial-pill"><i class="fas fa-gift"></i> Mwezi 1 wa Bure</span></div>
+                <h1>{{ __('auth.register_h1') }}</h1>
+                <p class="sub">{{ __('auth.register_sub') }}</p>
+                <div><span class="trial-pill"><i class="fas fa-gift"></i> {{ __('auth.trial_pill') }}</span></div>
+                <div style="margin-top:0.75rem;">@include('partials.lang-switch')</div>
             </div>
 
             @if($errors->any())
@@ -90,57 +91,57 @@
                 @csrf
 
                 <div class="form-group">
-                    <label for="business_name">Jina la Biashara</label>
+                    <label for="business_name">{{ __('auth.business_name') }}</label>
                     <div class="input-wrapper">
                         <i class="fas fa-store"></i>
-                        <input type="text" id="business_name" name="business_name" value="{{ old('business_name') }}" placeholder="Mfano: Mama Asha WiFi" required>
+                        <input type="text" id="business_name" name="business_name" value="{{ old('business_name') }}" placeholder="{{ __('auth.business_name_ph') }}" required>
                     </div>
                 </div>
 
                 <div class="grid2">
                     <div class="form-group">
-                        <label for="owner_name">Jina Lako</label>
+                        <label for="owner_name">{{ __('auth.owner_name') }}</label>
                         <div class="input-wrapper">
                             <i class="fas fa-user"></i>
-                            <input type="text" id="owner_name" name="owner_name" value="{{ old('owner_name') }}" placeholder="Jina kamili" required>
+                            <input type="text" id="owner_name" name="owner_name" value="{{ old('owner_name') }}" placeholder="{{ __('auth.name_ph') }}" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="phone">Namba ya Simu</label>
+                        <label for="phone">{{ __('auth.phone') }}</label>
                         <div class="input-wrapper">
                             <i class="fas fa-phone"></i>
-                            <input type="tel" id="phone" name="phone" value="{{ old('phone') }}" placeholder="07XXXXXXXX" required>
+                            <input type="tel" id="phone" name="phone" value="{{ old('phone') }}" placeholder="{{ __('auth.phone_ph') }}" required>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Barua Pepe</label>
+                    <label for="email">{{ __('auth.email') }}</label>
                     <div class="input-wrapper">
                         <i class="fas fa-envelope"></i>
-                        <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="wewe@biashara.com" required>
+                        <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="{{ __('auth.email_ph') }}" required>
                     </div>
                 </div>
 
                 <div class="grid2">
                     <div class="form-group">
-                        <label for="password">Nenosiri</label>
+                        <label for="password">{{ __('auth.password') }}</label>
                         <div class="input-wrapper">
                             <i class="fas fa-lock"></i>
-                            <input type="password" id="password" name="password" placeholder="Angalau herufi 8" required>
+                            <input type="password" id="password" name="password" placeholder="{{ __('auth.password_ph') }}" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="password_confirmation">Rudia Nenosiri</label>
+                        <label for="password_confirmation">{{ __('auth.password_confirm') }}</label>
                         <div class="input-wrapper">
                             <i class="fas fa-lock"></i>
-                            <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Rudia nenosiri" required>
+                            <input type="password" id="password_confirmation" name="password_confirmation" placeholder="{{ __('auth.password_confirm_ph') }}" required>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group" style="margin-bottom:.6rem;">
-                    <label>Chagua Kifurushi</label>
+                    <label>{{ __('auth.choose_plan') }}</label>
                 </div>
                 <div class="plans" id="plans">
                     @php $selectedPlan = old('saas_plan_id', request('plan')); @endphp
@@ -150,23 +151,23 @@
                         <span class="radio"></span>
                         <span class="info">
                             <span class="name">{{ $plan->name }}</span>
-                            <span class="meta">{{ number_format($plan->max_routers) }} routers · {{ number_format($plan->max_customers) }} wateja</span>
+                            <span class="meta">{{ __('auth.plan_meta', ['routers' => number_format($plan->max_routers), 'customers' => number_format($plan->max_customers)]) }}</span>
                         </span>
                         <span class="price">TSh {{ number_format($plan->price) }}</span>
                     </label>
                     @empty
-                    <div class="alert" style="margin:0;">Hakuna vifurushi vinavyopatikana kwa sasa. Tafadhali jaribu tena baadaye.</div>
+                    <div class="alert" style="margin:0;">{{ __('auth.no_plans') }}</div>
                     @endforelse
                 </div>
 
                 <button type="submit" class="btn-submit" id="submitBtn">
                     <i class="fas fa-user-plus" id="btnIcon"></i>
-                    <span id="btnText">Fungua Akaunti Yangu</span>
+                    <span id="btnText">{{ __('auth.submit_register') }}</span>
                 </button>
             </form>
 
             <div class="footer">
-                Tayari una akaunti? <a href="{{ route('owner.login') }}">Ingia hapa</a>
+                {{ __('auth.have_account') }} <a href="{{ route('owner.login') }}">{{ __('auth.login_here') }}</a>
             </div>
         </div>
     </div>
@@ -183,7 +184,7 @@
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
             document.getElementById('btnIcon').className = 'fas fa-spinner fa-spin';
-            document.getElementById('btnText').innerText = 'Inasajili...';
+            document.getElementById('btnText').innerText = @json(__('auth.registering'));
         });
     </script>
 </body>

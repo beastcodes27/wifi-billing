@@ -108,10 +108,10 @@ class PortalController extends Controller
 
     public function index(Request $request)
     {
-        if ($request->has('lang')) {
+        if ($request->has('lang') && in_array($request->query('lang'), ['en', 'sw'], true)) {
             session(['locale' => $request->query('lang')]);
         }
-        $lang = session('locale', 'sw');
+        $lang = in_array(session('locale'), ['en', 'sw'], true) ? session('locale') : config('app.locale', 'en');
 
         // Mikrotik sends mac, ip, link-login, link-orig, etc in the URL for the hotspot
         $mac = $request->query('mac', '');

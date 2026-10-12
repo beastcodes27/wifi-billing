@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sw">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -15,7 +15,7 @@
         $brandInitials = substr($businessName, 0, 2);
     @endphp
 
-    <title>Ingia — {{ $businessName }} Management System</title>
+    <title>{{ __('auth.title_login') }} — {{ $businessName }}</title>
 
     <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -477,12 +477,12 @@
 
                 <div>
                     <span class="system-live-pill">
-                        <span class="pulse-dot"></span> System Online
+                        <span class="pulse-dot"></span> {{ __('auth.system_online') }}
                     </span>
                 </div>
 
                 <h1 class="brand-title">{{ $businessName }}</h1>
-                <p class="brand-subtitle">Ingia kusimamia mtandao, vocha na miamala</p>
+                <p class="brand-subtitle">{{ __('auth.login_sub') }}</p>
             </div>
 
             {{-- Error Message Display --}}
@@ -500,7 +500,7 @@
                 {{-- Email Field --}}
                 <div class="form-group">
                     <label class="form-label" for="email">
-                        <span>Barua Pepe (Email)</span>
+                        <span>{{ __('auth.email') }}</span>
                     </label>
                     <div class="input-wrapper">
                         <i class="fas fa-envelope input-icon-left"></i>
@@ -511,11 +511,11 @@
                 {{-- Password Field with Eye Toggle --}}
                 <div class="form-group">
                     <label class="form-label" for="password">
-                        <span>Nenosiri (Password)</span>
+                        <span>{{ __('auth.password') }}</span>
                     </label>
                     <div class="input-wrapper">
                         <i class="fas fa-lock input-icon-left"></i>
-                        <input type="password" id="password" name="password" class="form-input" placeholder="Weka nenosiri lako" required autocomplete="current-password">
+                        <input type="password" id="password" name="password" class="form-input" placeholder="{{ __('auth.password_ph') }}" required autocomplete="current-password">
                         <button type="button" class="password-toggle-btn" id="passwordToggleBtn" title="Onyesha / Ficha nenosiri" aria-label="Badili kuona nenosiri">
                             <i class="fas fa-eye" id="passwordEyeIcon"></i>
                         </button>
@@ -526,21 +526,21 @@
                 <div class="remember-row">
                     <label class="custom-checkbox-label" for="rememberMeCheckbox">
                         <input type="checkbox" id="rememberMeCheckbox" name="remember" class="custom-checkbox">
-                        <span>Nikumbuke kwenye kifaa hiki</span>
+                        <span>{{ __('auth.remember') }}</span>
                     </label>
                 </div>
 
                 {{-- High-Impact Submit Button --}}
                 <button type="submit" class="btn-submit" id="submitBtn">
                     <i class="fas fa-arrow-right-to-bracket" id="btnIcon"></i>
-                    <span id="btnText">Ingia Kwenye Dashibodi</span>
+                    <span id="btnText">{{ __('auth.submit_login') }}</span>
                 </button>
 
                 {{-- Security Badge --}}
                 <div style="text-align: center;">
                     <div class="security-badge">
                         <i class="fas fa-shield-halved" style="color: #10B981;"></i>
-                        <span>256-Bit SSL • Salama Kabisa</span>
+                        <span>{{ __('auth.secure') }}</span>
                     </div>
                 </div>
             </form>
@@ -548,12 +548,13 @@
 
         {{-- Footer Support Meta --}}
         <div class="auth-footer">
-            <div>&copy; {{ date('Y') }} {{ $businessName }}. Haki zote zimehifadhiwa.</div>
+            <div style="margin-bottom: 0.5rem;">@include('partials.lang-switch')</div>
+            <div>&copy; {{ date('Y') }} {{ $businessName }}. {{ __('landing.footer_rights') }}</div>
             <div style="margin-top: 0.45rem;">
-                Huna akaunti ya biashara? <a href="{{ route('owner.register') }}" class="support-link">Jisajili hapa</a>
+                {{ __('auth.no_account') }} <a href="{{ route('owner.register') }}" class="support-link">{{ __('auth.register_here') }}</a>
             </div>
             <div style="margin-top: 0.35rem;">
-                Unahitaji msaada? <a href="tel:0762457308" class="support-link"><i class="fas fa-phone-alt" style="font-size: 0.7rem; margin-right: 2px;"></i> 0762457308</a>
+                {{ __('auth.need_help') }} <a href="tel:0762457308" class="support-link"><i class="fas fa-phone-alt" style="font-size: 0.7rem; margin-right: 2px;"></i> 0762457308</a>
             </div>
         </div>
     </div>
@@ -597,7 +598,7 @@
                         btnIcon.className = 'fas fa-spinner fa-spin';
                     }
                     if (btnText) {
-                        btnText.innerText = 'Inaingia...';
+                        btnText.innerText = @json(__('auth.logging_in'));
                     }
                 });
             }
