@@ -13,7 +13,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // 1. Online Revenue (Money received via Mobile Money / FimiPay / PalmPesa)
+        // 1. Online Revenue (Money received via Mobile Money / SonicPesa)
         $onlineRevenue = Transaction::where('status', 'success')
             ->where('payment_method', '!=', 'cash')
             ->sum('amount');

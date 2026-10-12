@@ -105,8 +105,8 @@
 
             <select name="method" class="form-control" style="flex: 1 1 130px; border-radius: 10px; padding: 0.65rem 0.9rem; font-size: 0.85rem; border: 1px solid var(--border-color); background: #FFFFFF;">
                 <option value="">Njia Zote za Malipo</option>
-                <option value="fimipay" {{ ($method ?? '') === 'fimipay' ? 'selected' : '' }}>FimiPay</option>
-                <option value="palm_pesa" {{ ($method ?? '') === 'palm_pesa' ? 'selected' : '' }}>Palm Pesa</option>
+                <option value="sonicpesa" {{ ($method ?? '') === 'sonicpesa' ? 'selected' : '' }}>SonicPesa</option>
+                <option value="palm_pesa" {{ ($method ?? '') === 'palm_pesa' ? 'selected' : '' }}>Palm Pesa (legacy)</option>
                 <option value="mpesa" {{ ($method ?? '') === 'mpesa' ? 'selected' : '' }}>M-Pesa</option>
                 <option value="airtel" {{ ($method ?? '') === 'airtel' ? 'selected' : '' }}>Airtel Money</option>
                 <option value="halo" {{ ($method ?? '') === 'halo' ? 'selected' : '' }}>HaloPesa</option>
@@ -222,6 +222,10 @@
                                     <span style="display: inline-flex; align-items: center; gap: 0.3rem; background: #DCFCE7; color: #15803D; padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.7rem; font-weight: 700;">
                                         <i class="fas fa-mobile-alt"></i> M-Pesa
                                     </span>
+                                @elseif(strtolower($txn->payment_method) == 'sonicpesa')
+                                    <span style="display: inline-flex; align-items: center; gap: 0.3rem; background: rgba(255, 51, 0, 0.1); color: #FF3300; padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.7rem; font-weight: 700;">
+                                        <i class="fas fa-bolt"></i> SonicPesa
+                                    </span>
                                 @elseif(strtolower($txn->payment_method) == 'fimipay')
                                     <span style="display: inline-flex; align-items: center; gap: 0.3rem; background: rgba(255, 51, 0, 0.1); color: #FF3300; padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.7rem; font-weight: 700;">
                                         <i class="fas fa-bolt"></i> FimiPay
@@ -324,9 +328,13 @@
                         <span style="background: #FEF3C7; color: #B45309; font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 6px;">
                             <i class="fas fa-money-bill-wave"></i> Cash
                         </span>
+                    @elseif(strtolower($txn->payment_method) == 'sonicpesa')
+                        <span style="background: rgba(255, 51, 0, 0.1); color: #FF3300; font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 6px;">
+                            <i class="fas fa-bolt"></i> SonicPesa
+                        </span>
                     @elseif(strtolower($txn->payment_method) == 'fimipay')
                         <span style="background: rgba(255, 51, 0, 0.1); color: #FF3300; font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 6px;">
-                            <i class="fas fa-bolt"></i> FimiPay
+                            <i class="fas fa-bolt"></i> FimiPay (legacy)
                         </span>
                     @else
                         <span style="background: #EFF6FF; color: #1D4ED8; font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 6px;">

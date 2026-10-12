@@ -96,7 +96,9 @@ class Transaction extends Model
     public function getPaymentMethodLabelAttribute(): string
     {
         return match ($this->payment_method) {
+            'sonicpesa' => 'SonicPesa',
             'palm_pesa' => 'Palm Pesa',
+            'fimipay'   => 'FimiPay',
             'mpesa'     => 'M-Pesa',
             'airtel'    => 'Airtel Money',
             'halo'      => 'HaloPesa',

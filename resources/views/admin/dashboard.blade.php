@@ -401,7 +401,7 @@
         </div>
         <div class="fintech-subpill">
             <i class="fas fa-mobile-alt subpill-icon" style="color: #38BDF8;"></i>
-            <span class="subpill-title">Online (Fimi)</span>
+            <span class="subpill-title">Online (SonicPesa)</span>
             <span class="subpill-val" id="heroOnlineVal" style="color: #38BDF8;">Tsh {{ $onlineRevenue > 0 ? number_format($onlineRevenue) : '00' }}</span>
         </div>
         <div class="fintech-subpill">

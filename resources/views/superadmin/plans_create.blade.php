@@ -59,7 +59,7 @@
         <div style="margin-bottom: 2.5rem;">
             <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; color: var(--text-main);">
                 <input type="checkbox" name="has_auto_payment" value="1" {{ old('has_auto_payment') ? 'checked' : '' }} style="width: 18px; height: 18px; accent-color: #8b5cf6;">
-                <span>Has Auto Payment (Palmpesa/AzamPay integration for self-service)</span>
+                <span>Has Auto Payment (SonicPesa integration for self-service)</span>
             </label>
         </div>
 
