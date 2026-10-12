@@ -73,6 +73,7 @@ use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\SiteController;
 use App\Http\Controllers\Admin\RouterController;
+use App\Http\Controllers\Admin\AccessPointController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ExpenseController;
@@ -161,6 +162,16 @@ Route::middleware(['auth', 'tenant', \App\Http\Middleware\RequireActiveSubscript
     Route::get('/admin/routers/download-login-template', [RouterController::class, 'downloadLoginHtml'])->name('admin.routers.download_login');
     Route::resource('admin/routers', RouterController::class, ['as' => 'admin']);
     Route::get('/admin/routers/{router}/provision', [RouterController::class, 'provision'])->name('admin.routers.provision');
+
+    // Access Points (manual entry + AI sticker scan adoption)
+    Route::get('/admin/access-points', [AccessPointController::class, 'index'])->name('admin.access_points.index');
+    Route::get('/admin/access-points/create', [AccessPointController::class, 'create'])->name('admin.access_points.create');
+    Route::post('/admin/access-points', [AccessPointController::class, 'store'])->name('admin.access_points.store');
+    Route::post('/admin/access-points/scan', [AccessPointController::class, 'scan'])->name('admin.access_points.scan');
+    Route::get('/admin/access-points/{accessPoint}/edit', [AccessPointController::class, 'edit'])->name('admin.access_points.edit');
+    Route::put('/admin/access-points/{accessPoint}', [AccessPointController::class, 'update'])->name('admin.access_points.update');
+    Route::post('/admin/access-points/{accessPoint}/adopt', [AccessPointController::class, 'adopt'])->name('admin.access_points.adopt');
+    Route::delete('/admin/access-points/{accessPoint}', [AccessPointController::class, 'destroy'])->name('admin.access_points.destroy');
 
     // Customers
     Route::resource('admin/customers', CustomerController::class, ['as' => 'admin']);

@@ -358,6 +358,11 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('admin.access_points.index') }}" class="nav-link {{ request()->routeIs('admin.access_points.*') ? 'active' : '' }}">
+                        <i class="fas fa-tower-broadcast"></i> <span>Access Points</span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('admin.live_sessions') }}" class="nav-link {{ request()->routeIs('admin.live_sessions*') ? 'active' : '' }}">
                         <i class="fas fa-satellite-dish"></i> <span>Live Sessions</span>
                         <span class="nav-pulse-badge">LIVE</span>
@@ -651,6 +656,12 @@
                     <i class="fas fa-network-wired"></i>
                 </div>
                 <span>Routers</span>
+            </a>
+            <a href="{{ route('admin.access_points.index') }}" class="drawer-btn {{ request()->routeIs('admin.access_points.*') ? 'active-drawer-btn' : '' }}">
+                <div class="drawer-icon-box" style="background: rgba(255, 51, 0, 0.12); color: #FF3300;">
+                    <i class="fas fa-tower-broadcast"></i>
+                </div>
+                <span>Access Points</span>
             </a>
             <a href="{{ route('admin.live_sessions') }}" class="drawer-btn {{ request()->routeIs('admin.live_sessions*') ? 'active-drawer-btn' : '' }}">
                 <div class="drawer-icon-box" style="background: rgba(16, 185, 129, 0.12); color: #10B981; position: relative;">
