@@ -549,6 +549,9 @@
         {{-- Footer Support Meta --}}
         <div class="auth-footer">
             <div>&copy; {{ date('Y') }} {{ $businessName }}. Haki zote zimehifadhiwa.</div>
+            <div style="margin-top: 0.45rem;">
+                Huna akaunti ya biashara? <a href="{{ route('owner.register') }}" class="support-link">Jisajili hapa</a>
+            </div>
             <div style="margin-top: 0.35rem;">
                 Unahitaji msaada? <a href="tel:0762457308" class="support-link"><i class="fas fa-phone-alt" style="font-size: 0.7rem; margin-right: 2px;"></i> 0762457308</a>
             </div>

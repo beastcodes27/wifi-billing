@@ -464,7 +464,7 @@
             if (label) label.innerText = 'Inakagua';
 
             // Check server one last time before declaring timeout
-            fetch("{{ url('check-status/' . $transactionRef) }}")
+            fetch("{{ url('portal/check-status/' . $transactionRef) }}")
                 .then(r => r.json())
                 .then(data => {
                     if (data.status === 'success' && data.voucher) {
@@ -596,7 +596,7 @@
         const checkStatus = () => {
             if (isRedirecting) return;
 
-            fetch("{{ url('check-status/' . $transactionRef) }}")
+            fetch("{{ url('portal/check-status/' . $transactionRef) }}")
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success' && data.voucher) {

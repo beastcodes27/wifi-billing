@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'api/fimipay-webhook',
             'api/palm-pesa-webhook',
+            'api/sonicpesa-webhook',
             'api/mikrotik/*',
             'portal/restore-bundle',
         ]);
@@ -23,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'fallback_tenant' => \App\Http\Middleware\FallbackTenantMiddleware::class,
             'mikrotik_token' => \App\Http\Middleware\MikrotikTokenMiddleware::class,
             'super_admin' => \App\Http\Middleware\SuperAdminMiddleware::class,
+            'active_subscription' => \App\Http\Middleware\RequireActiveSubscription::class,
         ]);
 
         $middleware->priority([

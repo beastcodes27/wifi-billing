@@ -539,7 +539,7 @@
             btn.disabled = true;
             btnText.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
-            fetch('{{ url("check-voucher") }}/' + encodeURIComponent(code))
+            fetch('{{ url("portal/check-voucher") }}/' + encodeURIComponent(code))
                 .then(res => res.json())
                 .then(data => {
                     if (data.valid === false) {

@@ -6,20 +6,41 @@ use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\PortalController;
+use App\Http\Controllers\LandingController;
+use App\Http\Controllers\WebhookController;
+use App\Http\Controllers\Owner\RegisterController;
 
+// Public marketing landing page
+Route::get('/', [LandingController::class, 'index'])->name('landing');
+
+// Owner self-service authentication & registration
+Route::middleware('guest')->group(function () {
+    Route::get('/owner/login', [\App\Http\Controllers\Admin\AuthController::class, 'showLoginForm'])->name('owner.login');
+    Route::post('/owner/login', [\App\Http\Controllers\Admin\AuthController::class, 'login'])->name('owner.login.submit');
+    Route::get('/owner/register', [RegisterController::class, 'show'])->name('owner.register');
+    Route::post('/owner/register', [RegisterController::class, 'store'])->name('owner.register.submit');
+});
+Route::post('/owner/logout', [\App\Http\Controllers\Admin\AuthController::class, 'logout'])->name('owner.logout');
+
+// Guest captive portal (tenant resolved by router sync token, then fallback)
+Route::middleware('fallback_tenant')->prefix('portal')->name('portal.')->group(function () {
+    Route::get('/', [PortalController::class, 'index'])->name('index');
+    Route::post('process-payment', [PortalController::class, 'processPayment'])->name('process');
+    Route::get('process-payment', function() { return redirect()->route('portal.index'); });
+    Route::get('processing/{transactionRef}', [PortalController::class, 'processing'])->name('processing');
+    Route::get('check-status/{transactionRef}', [PortalController::class, 'checkStatus']);
+    Route::get('check-voucher/{code}', [PortalController::class, 'checkVoucher']);
+    Route::post('restore-bundle', [PortalController::class, 'restoreBundle'])->name('restore_bundle');
+    Route::post('restore-bundle-alias', [PortalController::class, 'restoreBundle'])->name('restore.bundle');
+    Route::get('check-saved-session', [PortalController::class, 'checkSavedSession'])->name('check_saved_session');
+    Route::get('check-saved-session-alias', [PortalController::class, 'checkSavedSession'])->name('check.saved.session');
+});
+
+// Payment webhooks + PWA manifest (stable public URLs, tenant optional)
 Route::middleware('fallback_tenant')->group(function () {
-    Route::get('/', [PortalController::class, 'index'])->name('portal.index');
-    Route::post('/process-payment', [PortalController::class, 'processPayment'])->name('portal.process');
-    Route::get('/process-payment', function() { return redirect('/'); });
-    Route::get('/processing/{transactionRef}', [PortalController::class, 'processing'])->name('portal.processing');
-    Route::get('/check-status/{transactionRef}', [PortalController::class, 'checkStatus']);
-    Route::get('/check-voucher/{code}', [PortalController::class, 'checkVoucher']);
-    Route::post('/portal/restore-bundle', [PortalController::class, 'restoreBundle'])->name('portal.restore_bundle');
-    Route::post('/portal/restore-bundle-alias', [PortalController::class, 'restoreBundle'])->name('portal.restore.bundle');
-    Route::get('/portal/check-saved-session', [PortalController::class, 'checkSavedSession'])->name('portal.check_saved_session');
-    Route::get('/portal/check-saved-session-alias', [PortalController::class, 'checkSavedSession'])->name('portal.check.saved.session');
-    Route::post('/api/fimipay-webhook', [\App\Http\Controllers\WebhookController::class, 'fimiPay'])->name('portal.fimipay.webhook');
-    Route::post('/api/palm-pesa-webhook', [\App\Http\Controllers\WebhookController::class, 'palmPesa']);
+    Route::post('/api/fimipay-webhook', [WebhookController::class, 'fimiPay'])->name('portal.fimipay.webhook');
+    Route::post('/api/palm-pesa-webhook', [WebhookController::class, 'palmPesa']);
+    Route::post('/api/sonicpesa-webhook', [WebhookController::class, 'sonicPesa'])->name('portal.sonicpesa.webhook');
     Route::get('/manifest.json', function () {
         $path = public_path('manifest.json');
         if (file_exists($path)) {
