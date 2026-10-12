@@ -25,11 +25,21 @@ class RequireActiveSubscription
         $tenant = app(\App\Services\TenantContext::class)->getTenant();
 
         if ($tenant) {
-            $subscription = $tenant->currentSubscription;
+            // Access is granted for an active OR in-trial, unexpired subscription.
+            $subscription = $tenant->activeSubscription();
 
-            if (!$subscription || $subscription->status !== 'active' || now()->greaterThan($subscription->ends_at)) {
-                // Ignore if already on the billing or profile pages
-                if (!$request->routeIs('admin.billing') && !$request->routeIs('admin.billing.pay') && !$request->routeIs('admin.billing.processing') && !$request->routeIs('admin.billing.status') && !$request->routeIs('admin.dashboard') && !$request->routeIs('admin.profile')) {
+            if (! $subscription) {
+                // Pages a blocked tenant may still reach while they renew.
+                $allowed = $request->routeIs(
+                    'admin.billing',
+                    'admin.billing.pay',
+                    'admin.billing.processing',
+                    'admin.billing.status',
+                    'admin.dashboard',
+                    'admin.profile',
+                );
+
+                if (! $allowed) {
                     return redirect()->route('admin.billing')->with('error', 'Tafadhali chagua na kulipia kifurushi kwanza ili uendelee kutumia mfumo.');
                 }
             }
