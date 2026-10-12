@@ -42,4 +42,11 @@ return [
         'secret_key' => env('FIMIPAY_SECRET_KEY'),
     ],
 
+    'sonicpesa' => [
+        'base_url' => env('SONIC_PESA_BASE_URL', 'https://api.sonicpesa.com/api/v1'),
+        'api_key' => env('SONIC_PESA_API_KEY'),
+        'api_secret' => env('SONIC_PESA_API_SECRET'),
+        'currency' => env('SONIC_PESA_CURRENCY', 'TZS'),
+    ],
+
 ];
