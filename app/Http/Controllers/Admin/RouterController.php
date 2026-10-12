@@ -88,10 +88,26 @@ class RouterController extends Controller
 
     public function downloadLoginHtml()
     {
-        $appUrl = config('app.url');
+        $appUrl = rtrim((string) config('app.url'), '/');
         if (empty($appUrl) || str_contains($appUrl, 'localhost')) {
             $appUrl = 'https://drinkpoint.store';
         }
+
+        // Resolve this tenant's router so the guest portal is tenant-branded.
+        $tenant = app(\App\Services\TenantContext::class)->getTenant();
+        $tokenParam = '';
+        if ($tenant) {
+            $router = \App\Models\Router::withoutGlobalScopes()
+                ->where('tenant_id', $tenant->id)
+                ->orderBy('id')
+                ->first();
+            if ($router && $router->sync_token) {
+                $tokenParam = '&token=' . $router->sync_token;
+            }
+        }
+
+        $portalUrl = $appUrl . '/portal?mac=$(mac)&ip=$(ip)&link-login=$(link-login-only)&link-login-only=$(link-login-only)&link-orig=$(link-orig-esc)&error=$(error)' . $tokenParam;
+
         $html = '<!DOCTYPE html>
 <html>
 <head>
@@ -101,7 +117,7 @@ class RouterController extends Controller
     MAAGIZO:
     Buruta faili hili na kuliweka kwenye Winbox -> Files -> hotspot
     -->
-    <meta http-equiv="refresh" content="0; url=' . $appUrl . '/?mac=$(mac)&ip=$(ip)&link-login=$(link-login-only)&link-login-only=$(link-login-only)&link-orig=$(link-orig-esc)&error=$(error)">
+    <meta http-equiv="refresh" content="0; url=' . $portalUrl . '">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body { font-family: sans-serif; text-align: center; margin-top: 50px; background: #0c0c0e; color: #fff; }
@@ -115,7 +131,7 @@ class RouterController extends Controller
     <p style="color: #94a3b8; font-size: 14px;">Tafadhali subiri kidogo unaelekezwa kwenye mfumo.</p>
     <script>
         setTimeout(function() {
-            window.location.href = "' . $appUrl . '/?mac=$(mac)&ip=$(ip)&link-login=$(link-login-only)&link-login-only=$(link-login-only)&link-orig=$(link-orig-esc)&error=$(error)";
+            window.location.href = "' . $portalUrl . '";
         }, 1200);
     </script>
 </body>

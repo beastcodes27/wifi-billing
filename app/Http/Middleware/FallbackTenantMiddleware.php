@@ -9,19 +9,37 @@ use Symfony\Component\HttpFoundation\Response;
 class FallbackTenantMiddleware
 {
     /**
-     * Handle an incoming request.
+     * Resolve the tenant for the public captive portal.
      *
-     * @param  Closure(Request): (Response)  $next
+     * Order: existing context -> router sync token -> first tenant (legacy default).
      */
     public function handle(Request $request, Closure $next): Response
     {
         $context = app(\App\Services\TenantContext::class);
-        if (!$context->getTenantId()) {
-            $tenant = \App\Models\Tenant::find(1);
-            if ($tenant) {
-                $context->setTenant($tenant);
+
+        if ($context->getTenantId()) {
+            return $next($request);
+        }
+
+        // Per-tenant captive portal: the MikroTik login page links to /portal?token=<router sync_token>.
+        $token = $request->route('token') ?? $request->query('token');
+        if ($token) {
+            $router = \App\Models\Router::withoutGlobalScopes()->where('sync_token', $token)->first();
+            if ($router && $router->tenant_id) {
+                $tenant = \App\Models\Tenant::find($router->tenant_id);
+                if ($tenant) {
+                    $context->setTenant($tenant);
+
+                    return $next($request);
+                }
             }
         }
+
+        $tenant = \App\Models\Tenant::find(1);
+        if ($tenant) {
+            $context->setTenant($tenant);
+        }
+
         return $next($request);
     }
 }
