@@ -416,13 +416,6 @@
                     $currentTenant = app(\App\Services\TenantContext::class)->getTenant();
                     $hasAutoPayment = $currentTenant && $currentTenant->currentSubscription && $currentTenant->currentSubscription->plan && $currentTenant->currentSubscription->plan->has_auto_payment;
                 @endphp
-                @if($hasAutoPayment)
-                <li>
-                    <a href="{{ route('admin.settings.payment') }}" class="nav-link {{ request()->routeIs('admin.settings.payment') ? 'active' : '' }}">
-                        <i class="fas fa-wallet"></i> <span>Njia za Malipo</span>
-                    </a>
-                </li>
-                @endif
             </ul>
 
             <div class="sidebar-section-title">TAKWIMU &amp; RIPOTI</div>
@@ -739,14 +732,6 @@
                 $currentTenant = app(\App\Services\TenantContext::class)->getTenant();
                 $hasAutoPayment = $currentTenant && $currentTenant->currentSubscription && $currentTenant->currentSubscription->plan && $currentTenant->currentSubscription->plan->has_auto_payment;
             @endphp
-            @if($hasAutoPayment)
-            <a href="{{ route('admin.settings.payment') }}" class="drawer-btn {{ request()->routeIs('admin.settings.payment*') ? 'active-drawer-btn' : '' }}">
-                <div class="drawer-icon-box" style="background: rgba(16, 185, 129, 0.12); color: #10B981;">
-                    <i class="fas fa-wallet"></i>
-                </div>
-                <span>Njia za Malipo</span>
-            </a>
-            @endif
             <a href="{{ route('admin.notifications.index') }}" class="drawer-btn {{ request()->routeIs('admin.notifications.*') ? 'active-drawer-btn' : '' }}">
                 <div class="drawer-icon-box" style="background: rgba(239, 68, 68, 0.12); color: #EF4444; position: relative;">
                     <i class="fas fa-bell"></i>
@@ -768,7 +753,7 @@
                 </div>
                 <span>Muonekano</span>
             </a>
-            <a href="{{ route('admin.settings') }}" class="drawer-btn {{ request()->routeIs('admin.settings*') && !request()->routeIs('admin.settings.payment*') ? 'active-drawer-btn' : '' }}">
+            <a href="{{ route('admin.settings') }}" class="drawer-btn {{ request()->routeIs('admin.settings*') ? 'active-drawer-btn' : '' }}">
                 <div class="drawer-icon-box" style="background: rgba(100, 116, 139, 0.12); color: #475569;">
                     <i class="fas fa-sliders-h"></i>
                 </div>
