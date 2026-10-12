@@ -34,6 +34,36 @@ class SaasSubscription extends Model
 
     public function isActive()
     {
-        return $this->status === 'active' && $this->ends_at->isFuture();
+        return in_array($this->status, ['active', 'trial'], true)
+            && $this->ends_at
+            && $this->ends_at->isFuture();
+    }
+
+    public function isTrial()
+    {
+        return $this->status === 'trial';
+    }
+
+    /**
+     * Mark the subscription as active and extend the tenant access.
+     */
+    public function activate(): void
+    {
+        $months = optional($this->plan)->billing_cycle_months ?: 1;
+
+        $this->update([
+            'status' => 'active',
+            'starts_at' => now(),
+            'ends_at' => now()->addMonths($months),
+        ]);
+
+        if ($this->tenant) {
+            $this->tenant->update(['status' => 'active']);
+        }
+    }
+
+    public function markFailed(): void
+    {
+        $this->update(['status' => 'failed']);
     }
 }

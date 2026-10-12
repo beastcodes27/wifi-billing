@@ -20,8 +20,12 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Admin Mama Richi Bando',
                 'password' => bcrypt(env('ADMIN_PASSWORD')),
+                'tenant_id' => 1,
             ]
         );
+
+        // Default SaaS plans available for business self-registration.
+        $this->call(SaasPlanSeeder::class);
 
         $packages = [
             ['name' => 'Masaa 4', 'price' => 500, 'duration_minutes' => 240, 'mikrotik_profile' => 'Masaa4'],

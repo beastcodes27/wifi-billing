@@ -30,4 +30,35 @@ class Tenant extends Model
     {
         return $this->hasOne(SaasSubscription::class)->latest('ends_at');
     }
+
+    /**
+     * The subscription granting access right now (active or in-trial, not expired).
+     */
+    public function activeSubscription(): ?SaasSubscription
+    {
+        return $this->saasSubscriptions()
+            ->whereIn('status', ['active', 'trial'])
+            ->where('ends_at', '>', now())
+            ->orderByDesc('ends_at')
+            ->first();
+    }
+
+    public function hasActiveAccess(): bool
+    {
+        return $this->activeSubscription() !== null;
+    }
+
+    public function isOnTrial(): bool
+    {
+        $sub = $this->activeSubscription();
+
+        return $sub !== null && $sub->status === 'trial';
+    }
+
+    public function trialEndsAt()
+    {
+        $sub = $this->activeSubscription();
+
+        return ($sub && $sub->status === 'trial') ? $sub->ends_at : null;
+    }
 }
