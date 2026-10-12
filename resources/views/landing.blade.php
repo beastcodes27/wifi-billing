@@ -139,10 +139,10 @@
                 <a href="#features">{{ __('landing.nav_features') }}</a>
                 <a href="#how">{{ __('landing.nav_how') }}</a>
                 <a href="#pricing">{{ __('landing.nav_pricing') }}</a>
-                <a href="{{ route('owner.login') }}">{{ __('landing.nav_login') }}</a>
                 @include('partials.lang-switch')
             </div>
             <div class="nav-cta">
+                <a href="{{ route('owner.login') }}" class="btn btn-ghost">{{ __('landing.nav_login') }}</a>
                 <a href="{{ route('owner.register') }}" class="btn btn-primary" id="navCta">{{ __('landing.nav_start') }}</a>
                 <button class="menu-toggle" id="menuToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
             </div>
@@ -157,7 +157,7 @@
             <p>{{ __('landing.hero_sub') }}</p>
             <div class="hero-cta">
                 <a href="{{ route('owner.register') }}" class="btn btn-primary"><i class="fas fa-rocket"></i> {{ __('landing.hero_cta_primary') }}</a>
-                <a href="#how" class="btn btn-ghost"><i class="fas fa-circle-play"></i> {{ __('landing.hero_cta_secondary') }}</a>
+                <a href="{{ route('owner.login') }}" class="btn btn-ghost"><i class="fas fa-right-to-bracket"></i> {{ __('landing.nav_login') }}</a>
             </div>
             <div class="hero-stats">
                 <div class="stat"><b>{{ __('landing.stat_mikrotik') }}</b><span>{{ __('landing.stat_mikrotik_sub') }}</span></div>
